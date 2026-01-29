@@ -1,0 +1,1 @@
+Гра **DuckHunt** на Python (бібліотека `pygame`)
