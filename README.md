@@ -6,3 +6,6 @@
    pip install -r requirements.txt
    ```
 2. Запустіть файл `main.py`:
+   ```
+   python main.py
+   ```
