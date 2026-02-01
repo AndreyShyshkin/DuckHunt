@@ -1,4 +1,4 @@
-import os
+import os, time  
 import pygame
 from .registry import adjpos, adjrect, adjwidth, adjheight
 from .gun import Gun
