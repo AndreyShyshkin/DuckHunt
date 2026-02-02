@@ -1,4 +1,4 @@
-import os, time  
+import os, time
 import pygame
 from .registry import adjpos, adjrect, adjwidth, adjheight
 from .gun import Gun
@@ -34,3 +34,13 @@ NOTICE_LINE_1_HEIGHT = adjheight (128)
 NOTICE_LINE_2_HEIGHT = adjwidth (150)
 
 registry = None
+
+class BaseState(object):
+    def __init__(self):
+        global registry
+        self.registry = registry
+        self.timer = int(time.time())
+        self.notices = set()
+        self.gun = Gun(self.registry)
+        self.hitDucks = [False for i in 10]  
+        self.hitDuckIndex = 0
