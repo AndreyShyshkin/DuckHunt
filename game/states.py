@@ -54,8 +54,9 @@ class BaseState(object):
         surface = self.registry.get('surface')
         controlImgs = self.registry.get('controlImgs')
         font = pygame.font.Font(FONT, adjheight (20))
-        line1 = font.render(str(self.notices[0]), True, (255, 255, 255))
-        line2 = font.render(str(self.notices[1]), True, (255, 255, 255))
+        notices_list = list(self.notices)
+        line1 = font.render(str(notices_list[0]), True, (255, 255, 255))
+        line2 = font.render(str(notices_list[1]), True, (255, 255, 255))
         x, y = NOTICE_POSITION
         x1 = x + (NOTICE_WIDTH - line1.get_width()) // 2
         x2 = x + (NOTICE_WIDTH - line2.get_width()) // 2
