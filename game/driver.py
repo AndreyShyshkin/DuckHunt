@@ -1,15 +1,14 @@
 import os
 import pygame
-from . import registry, states, sounds  
+from . import registry, states, sounds
 
 class Driver(object):
     def __init__(self, surface):
-        
+        # Set a global registry
         self.registry = registry.Registry()
         self.registry.set('surface', surface)
-        self.registry.set('soundHandler', sounds.SoundHandler()) 
+        self.registry.set('soundHandler', sounds.SoundHandler())
 
-        
         controls = pygame.image.load(os.path.join('assets', 'images', 'controls.png'))
         self.registry.set('controlImgs', pygame.transform.smoothscale (controls, states.adjpos (*controls.get_size ())))
 
@@ -28,7 +27,8 @@ class Driver(object):
         self.state = self.state.start()
 
     def handleEvent(self, event):
-        if event.type == pygame.KEYDOWN:
+        # Toggle sound
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_s:
             self.registry.get('soundHandler').toggleSound()
 
         self.state.execute(event)
