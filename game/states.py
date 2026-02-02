@@ -42,5 +42,5 @@ class BaseState(object):
         self.timer = int(time.time())
         self.notices = set()
         self.gun = Gun(self.registry)
-        self.hitDucks = [False for i in 10]  
+        self.hitDucks = [False for i in range(10)]
         self.hitDuckIndex = 0
