@@ -44,3 +44,55 @@ class BaseState(object):
         self.gun = Gun(self.registry)
         self.hitDucks = [False for i in range(10)]
         self.hitDuckIndex = 0
+
+    def renderNotices(self):
+        if len(self.notices) == 0:
+            return
+        elif len(self.notices) == 1:
+            self.notices.add("")
+
+        surface = self.registry.get('surface')
+        controlImgs = self.registry.get('controlImgs')
+        font = pygame.font.Font(FONT, adjheight (20))
+        line1 = font.render(str(self.notices[0]), True, (255, 255, 255))
+        line2 = font.render(str(self.notices[1]), True, (255, 255, 255))
+        x, y = NOTICE_POSITION
+        x1 = x + (NOTICE_WIDTH - line1.get_width()) // 2
+        x2 = x + (NOTICE_WIDTH - line2.get_width()) // 2
+        surface.blit(controlImgs, NOTICE_POSITION, NOTICE_RECT)
+        surface.blit(line1, (x1, NOTICE_LINE_1_HEIGHT))
+        surface.blit(line2, (x2, NOTICE_LINE_2_HEIGHT))
+
+    def renderControls(self):
+        img = self.registry.get('controlImgs')
+        surface = self.registry.get('surface')
+        round = self.registry.get('round')
+        controlImgs = self.registry.get('controlImgs')
+
+        font = pygame.font.Font(FONT, adjheight (20))
+        text = font.render(("R= %d" % round), True, FONT_GREEN, FONT_BLACK);
+        surface.blit(text, ROUND_POSITION);
+
+        startingX, startingY = SHOT_POSITION
+        surface.blit(controlImgs, SHOT_POSITION, SHOT_RECT)
+        for i in range(self.gun.rounds):
+            x = startingX + adjwidth (10) + adjwidth (i * 18)
+            y = startingY + adjheight (5)
+            surface.blit(controlImgs, (x, y), BULLET_RECT)
+
+        surface.blit(controlImgs, HIT_POSITION, HIT_RECT)
+        startingX, startingY = HIT_DUCK_POSITION
+        for i in range(10):
+            x = startingX + adjwidth (i * 18)
+            y = startingY
+            if self.hitDucks[i]:
+                surface.blit(img, (x, y), HIT_DUCK_RED_RECT)
+            else:
+                surface.blit(img, (x, y), HIT_DUCK_WHITE_RECT)
+
+        surface.blit(img, SCORE_POSITION, SCORE_RECT)
+        font = pygame.font.Font(FONT, adjheight (20))
+        text = font.render(str(self.registry.get('score')), True, FONT_WHITE);
+        x, y = FONT_STARTING_POSITION
+        x -= text.get_width();
+        surface.blit(text, (x,y));
