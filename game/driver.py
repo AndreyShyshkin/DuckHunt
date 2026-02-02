@@ -1,14 +1,24 @@
 import os
 import pygame
-from . import registry, states
-
+from . import registry, states, sounds  
 
 class Driver(object):
     def __init__(self, surface):
         
         self.registry = registry.Registry()
         self.registry.set('surface', surface)
+        self.registry.set('soundHandler', sounds.SoundHandler()) 
+
         
+        controls = pygame.image.load(os.path.join('assets', 'images', 'controls.png'))
+        self.registry.set('controlImgs', pygame.transform.smoothscale (controls, states.adjpos (*controls.get_size ())))
+
+        sprites = pygame.image.load(os.path.join('assets', 'images', 'sprites.png'))
+        sprites = pygame.transform.scale (sprites, states.adjpos (*sprites.get_size ()))
+        self.registry.set('sprites', sprites)
+        
+        rsprites = pygame.transform.flip(sprites, True, False)
+        self.registry.set('rsprites', rsprites)
 
         self.registry.set('score', 0)
         self.registry.set('round', 1)
@@ -18,6 +28,9 @@ class Driver(object):
         self.state = self.state.start()
 
     def handleEvent(self, event):
+        if event.type == pygame.KEYDOWN:
+            self.registry.get('soundHandler').toggleSound()
+
         self.state.execute(event)
 
     def update(self):
