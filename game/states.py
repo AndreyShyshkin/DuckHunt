@@ -175,6 +175,7 @@ class PlayState(BaseState):
         self.dogCanComeOut = False
         self.dogPosition = DOG_REPORT_POSITION
         self.dogdy = 5
+        self.hitDuckIndex = 0
 
     def execute(self, event):
         if event.type == pygame.MOUSEMOTION:
