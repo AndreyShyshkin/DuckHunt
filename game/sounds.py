@@ -10,7 +10,20 @@ def getSound(name, volume):
     return sound
 
 class SoundHandler:
-
+    def __init__(self):
+        self.mute = False
+        self.queue = set()
+        self.sounds = {
+            'bark':      getSound("bark.ogg", 0.7),
+            'blast':     getSound("blast.ogg", 0.7),
+            'drop':      getSound("drop.ogg", 0.2),
+            'flyaway':   getSound("flyaway.ogg", 1.0),
+            'gameover':  getSound("gameover.ogg", 0.7),
+            'hit':       getSound("hit.ogg", 1.0),
+            'nextround': getSound("next-round.ogg", 1.0),
+            'point':     getSound("point.ogg", 1.0),
+            'quack':     getSound("quack.ogg", 0.7)
+        }
 
     def enqueue(self, sound):
         self.queue.add(self.sounds[sound])
@@ -19,8 +32,6 @@ class SoundHandler:
         for sound in self.queue:
             if not self.mute:
                 sound.play()
-                def stop(self):
-                    self.queue.remove(sound)
         self.queue.clear()
 
     def toggleSound(self):

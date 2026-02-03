@@ -23,8 +23,8 @@ class Gun(object):
 
     def shoot(self):
         if self.rounds <= 0:
-            return False;
+            return False
 
-        self.registry.get('soundHandler').enqueue('blast');
-        self.rounds = self.rounds - 1;
-        return True;
+        self.registry.get('soundHandler').enqueue('blast')
+        self.rounds = self.rounds - 1
+        return True
