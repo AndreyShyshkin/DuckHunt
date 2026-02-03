@@ -268,3 +268,58 @@ class PlayState(BaseState):
                 surface.blit(sprites, self.dogPosition, (x2, y2, width, height))
 
         self.gun.render()
+
+class RoundEndState(BaseState):
+    def __init__(self, hitDucks):
+        super(RoundEndState, self).__init__()
+        self.isGameOver = False
+        self.hitDucks = hitDucks
+
+        missedCount = 0
+        for i in self.hitDucks:
+            if i == False:
+                missedCount += 1
+        
+        if missedCount >= 4:
+            self.isGameOver = True
+            self.notices = ("GAMEOVER", "")
+            self.registry.get('soundHandler').enqueue('gameover')
+        else:
+            self.registry.get('soundHandler').enqueue('nextround')
+
+    def execute(self, event):
+        pass
+
+    def update(self):
+        while pygame.mixer.get_busy():
+            return
+
+        if self.isGameOver:
+            return GameOverState()
+        else:
+            self.registry.set('round', self.registry.get('round') + 1)
+            return RoundStartState()
+
+    def render(self):
+        self.renderNotices()
+        self.renderControls()
+
+class GameOverState(BaseState):
+    def __init__(self):
+        super(GameOverState, self).__init__()
+        self.state = None
+
+    def execute(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.registry.set('score', 0)
+            self.registry.set('round', 1)
+            self.state = RoundStartState()
+
+    def update(self):
+        self.notices = ("GAMEOVER", "")
+        if self.state:
+            return self.state
+
+    def render(self):
+        self.renderNotices()
+        self.renderControls()
