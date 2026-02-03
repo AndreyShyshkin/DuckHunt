@@ -97,3 +97,71 @@ class BaseState(object):
         x, y = FONT_STARTING_POSITION
         x -= text.get_width();
         surface.blit(text, (x,y));
+
+class StartState(BaseState):
+    def __init__(self, reg):
+        global registry
+        registry = reg
+
+    def start(self):
+        return RoundStartState()
+
+class RoundStartState(BaseState):
+    def __init__(self):
+        super(RoundStartState, self).__init__()
+        self.frame = 1
+        self.animationFrame = 0
+        self.animationDelay = 10
+        self.dogPosition = DOG_POSITION
+        self.barkCount = 0
+
+    def execute(self, event):
+        pass
+
+    def update(self):
+        timer = int(time.time())
+
+        if (timer - self.timer) > 2:
+            self.showNotice = False
+            return PlayState()
+
+        self.notices = ("ROUND", self.registry.get('round'))
+        self.frame += 1
+
+    def render(self):
+        timer = int(time.time())
+        surface = self.registry.get('surface')
+        sprites = self.registry.get('sprites')
+        x, y = self.dogPosition
+        width, height = DOG_FRAME
+
+        self.renderNotices()
+        self.renderControls()
+
+        if (self.frame % 15) == 0:
+            self.animationFrame += 1
+
+        if self.animationFrame < 5:
+            x += 1
+            self.dogPosition = (x, y)
+            rect = ((width * self.animationFrame), 0, width, height)
+
+        else:
+            self.animationDelay = 16
+            animationFrame = self.animationFrame % 5
+            rect = ((width * animationFrame), height, width, height)
+
+            if (self.barkCount < 2) and not pygame.mixer.get_busy():
+                self.registry.get('soundHandler').enqueue('bark')
+                self.barkCount += 1
+
+            if (animationFrame == 1):
+                self.dogPosition = (x + adjwidth (5)), (y - adjheight (10))
+
+            elif (animationFrame == 2):
+                self.dogPosition = (x + adjwidth (5)), (y + adjheight (5))
+
+            elif (animationFrame > 2):
+                return
+
+        surface.blit(sprites, self.dogPosition, rect)
