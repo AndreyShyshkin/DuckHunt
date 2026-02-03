@@ -165,3 +165,105 @@ class RoundStartState(BaseState):
                 return
 
         surface.blit(sprites, self.dogPosition, rect)
+
+class PlayState(BaseState):
+    def __init__(self):
+        super(PlayState, self).__init__()
+        self.ducks = [Duck(self.registry), Duck(self.registry)]
+        self.roundTime = 10
+        self.frame = 0
+        self.dogCanComeOut = False
+        self.dogPosition = DOG_REPORT_POSITION
+        self.dogdy = 5
+
+    def execute(self, event):
+        if event.type == pygame.MOUSEMOTION:
+            self.gun.moveCrossHairs(event.pos)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            hasFired = self.gun.shoot()
+            for duck in self.ducks:
+                if hasFired and duck.isShot(event.pos):
+                    self.registry.set('score', self.registry.get('score') + 10)
+                    self.hitDucks[self.hitDuckIndex] = True
+                    self.hitDuckIndex += 1
+                elif not duck.isDead and self.gun.rounds <= 0:
+                     duck.flyOff = True
+
+    def update(self):
+        timer = int(time.time())
+
+        if self.dogCanComeOut:
+            return
+
+        for duck in self.ducks:
+            duck.update()
+
+        timesUp = (timer - self.timer) > self.roundTime
+        if not (timesUp or (self.ducks[0].isFinished and self.ducks[1].isFinished)):
+            return None
+
+        for duck in self.ducks:
+            if not duck.isFinished and not duck.isDead:
+                duck.flyOff = True
+                return None
+
+        for duck in self.ducks:
+            if not duck.isDead:
+                self.hitDuckIndex += 1
+
+        if self.hitDuckIndex >= 9:
+            return RoundEndState(self.hitDucks)
+
+        self.dogCanComeOut = True
+
+    def render(self):
+        timer = int(time.time())
+        surface = self.registry.get('surface')
+        sprites = self.registry.get('sprites')
+
+        self.renderControls()
+
+        for duck in self.ducks:
+            duck.render()
+
+        if self.dogCanComeOut:
+            self.frame += 3
+            ducksShot = 0
+            for duck in self.ducks:
+                if duck.isDead:
+                    ducksShot += 1
+
+            if ducksShot == 1:
+                x2, y2, width, height = DOG_ONE_DUCK_RECT
+                if self.frame == 3:
+                    self.registry.get('soundHandler').enqueue('hit')
+
+            elif ducksShot == 2:
+                x2, y2, width, height = DOG_TWO_DUCKS_RECT
+                if self.frame == 3:
+                    self.registry.get('soundHandler').enqueue('hit')
+
+            else:
+                x2, y2, width, height = DOG_LAUGH_RECT
+                if self.frame == 3:
+                    self.registry.get('soundHandler').enqueue('flyaway')
+
+            x1, y1 = self.dogPosition
+            if self.frame < height:
+                self.dogPosition = x1, (y1 - 3)
+                height = self.frame
+            else:
+                self.dogPosition = x1, (y1 + 3)
+                height -= (self.frame - height)
+
+            if height <= 0:
+                self.dogPosition = DOG_REPORT_POSITION
+                self.frame = 0
+                self.dogCanComeOut = False
+                self.ducks = [Duck(self.registry), Duck(self.registry)]
+                self.timer = timer
+                self.gun.reloadIt()
+            else:
+                surface.blit(sprites, self.dogPosition, (x2, y2, width, height))
+
+        self.gun.render()
