@@ -1,6 +1,5 @@
-ORIG_W, ORIG_H = (1920, 1080)
-RENDER_W = ORIG_W
-RENDER_H = ORIG_H
+ORIG_W, ORIG_H = (800, 500)
+RENDER_W, RENDER_H = ORIG_W, ORIG_H
 
 def adjwidth (x):
     return (RENDER_W * x) // ORIG_W
@@ -19,9 +18,7 @@ class Registry(object):
         self.registry = {}
 
     def set(self, key, value):
-
         self.registry[key] = value
-        
         return self
 
     def get(self, key):

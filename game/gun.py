@@ -6,7 +6,7 @@ class Gun(object):
         self.registry = registry
         self.rounds = 3
         self.mousePos = (0,0) # Starting postion
-        self.mouseImg = pygame.image.load(os.path.join('media', 'crosshairs.png'))
+        self.mouseImg = pygame.image.load(os.path.join('assets/img', 'crosshairs.png'))
 
     def render(self):
         surface = self.registry.get('surface')
