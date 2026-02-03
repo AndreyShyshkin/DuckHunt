@@ -29,7 +29,7 @@ class Duck(object):
         y = random.randint(0, surface.get_height() // 2)
         self.position = x, y
 
-        # Find direction
+        
         self.changeDirection()
 
     def update(self):
@@ -42,7 +42,6 @@ class Duck(object):
         if not self.isDead or not self.isFinished:
             self.changeDirection()
 
-        
         frameWidth, frameHeight = FRAME_SIZE
         pastLeft = (x + frameWidth) < 0
         pastTop = (y + frameHeight) < 0
@@ -59,11 +58,11 @@ class Duck(object):
         if self.isFinished:
             return
 
-        
+        # Set offsets
         xOffset = XOFFSET
         yOffset = FLYOFF_YOFFSET if self.flyOff else YOFFSET
 
-        
+        # Only update animation on key frames
         if self.frame == 0:
             self.animationFrame += 1
         animationFrame = 1 if (self.animationFrame % 4 == 3) else (self.animationFrame % 4)
@@ -75,7 +74,7 @@ class Duck(object):
 
         # Animate the duck drop
         else:
-            
+            # First frame is special
             if self.justShot:
                 if self.frame == 0:
                     self.justShot = False
@@ -97,22 +96,34 @@ class Duck(object):
         x2, y2 = pos
         frameX, frameY = FRAME_SIZE
 
-        
+        # If the duck is already dead or flying off, they can't be shot
         if self.flyOff or self.isDead:
             return False
 
-        
+        # If shot was outside the duck image
         if x2 < x1 or x2 > (x1 + frameX):
             return False
         if y2 < y1 or y2 > (y1 + frameY):
             return False
 
-        
+        # Prepare for the fall
         self.isDead = True
         self.justShot = True
         self.frame = 1
         self.dx, self.dy = adjpos (0, 4)
         return True
+
+    # Helper method to avoid code duplication
+    def _get_random_velocity(self, speed_range, x_dir_mult, min_y, max_y):
+        while True:
+            dx = random.choice(speed_range) * x_dir_mult
+            dy = random.randint(min_y, max_y)
+            dx, dy = adjpos(dx, dy)
+            # Ensure we have movement, prefer X movement check
+            if dy != 0: 
+                # Additional check to ensure we don't get stuck with 0 dx if that logic existed
+                if dx != 0:
+                    return dx, dy
 
     def changeDirection(self):
         surface = self.registry.get('surface')
@@ -122,11 +133,11 @@ class Duck(object):
         x, y = self.position
         coinToss = 1 if random.randint(0, 1) else -1
 
-        
+        # Only update on key frames
         if not self.frame == 0:
             return
 
-        
+        # Set flyoff
         if self.flyOff:
             self.dx, self.dy = adjpos (0, -4)
             return
@@ -136,41 +147,23 @@ class Duck(object):
             self.dx, self.dy = adjpos (0, 4)
             return
 
+        
+        
         # At the left side of the screen
         if x <= 0:
-            while True:
-                self.dx = random.choice(speedRange)
-                self.dy = random.randint(-4, 4)
-                self.dx, self.dy = adjpos (self.dx, self.dy)
-                if not self.dy == 0:
-                    break
+            self.dx, self.dy = self._get_random_velocity(speedRange, 1, -4, 4)
 
         # At the right side of the screen
         elif (x + frameWidth) > surface.get_width():
-            while True:
-                self.dx = random.choice(speedRange) * -1
-                self.dy = random.randint(-4, 4)
-                self.dx, self.dy = adjpos (self.dx, self.dy)
-                if not self.dy == 0:
-                    break
+            self.dx, self.dy = self._get_random_velocity(speedRange, -1, -4, 4)
 
         # At the top of the screen
         elif y <= 0:
-            while True:
-                self.dx = random.choice(speedRange) * coinToss
-                self.dy = random.randint(2, 4)
-                self.dx, self.dy = adjpos (self.dx, self.dy)
-                if not self.dx == 0:
-                    break
+             self.dx, self.dy = self._get_random_velocity(speedRange, coinToss, 2, 4)
 
         # At the bottom of the screen
         elif y > (surface.get_height() // 2):
-            while True:
-                self.dx = random.choice(speedRange) * coinToss
-                self.dy = random.randint(-4, -2)
-                self.dx, self.dy = adjpos (self.dx, self.dy)
-                if not self.dx == 0:
-                    break
+             self.dx, self.dy = self._get_random_velocity(speedRange, coinToss, -4, -2)
 
         # Reverse image if duck is flying opposite direction
         if self.dx < 0 and not self.imageReversed:
