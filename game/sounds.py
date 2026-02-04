@@ -1,10 +1,9 @@
 import os
 import pygame
-
-SOUNDS_DIR = "assets/audio"
+from . import settings
 
 def getSound(name, volume):
-    soundPath = os.path.join(SOUNDS_DIR, name)
+    soundPath = os.path.join(settings.AUDIO_DIR, name)
     sound = pygame.mixer.Sound(soundPath)
     sound.set_volume(volume)
     return sound
@@ -14,15 +13,15 @@ class SoundHandler:
         self.mute = False
         self.queue = set()
         self.sounds = {
-            'bark':      getSound("bark.ogg", 0.7),
-            'blast':     getSound("blast.ogg", 0.7),
-            'drop':      getSound("drop.ogg", 0.2),
-            'flyaway':   getSound("flyaway.ogg", 1.0),
-            'gameover':  getSound("gameover.ogg", 0.7),
-            'hit':       getSound("hit.ogg", 1.0),
-            'nextround': getSound("next-round.ogg", 1.0),
-            'point':     getSound("point.ogg", 1.0),
-            'quack':     getSound("quack.ogg", 0.7)
+            'bark':      getSound("bark.ogg", settings.VOL_BARK),
+            'blast':     getSound("blast.ogg", settings.VOL_BLAST),
+            'drop':      getSound("drop.ogg", settings.VOL_DROP),
+            'flyaway':   getSound("flyaway.ogg", settings.VOL_FLYAWAY),
+            'gameover':  getSound("gameover.ogg", settings.VOL_GAMEOVER),
+            'hit':       getSound("hit.ogg", settings.VOL_HIT),
+            'nextround': getSound("next-round.ogg", settings.VOL_NEXTROUND),
+            'point':     getSound("point.ogg", settings.VOL_POINT),
+            'quack':     getSound("quack.ogg", settings.VOL_QUACK)
         }
 
     def enqueue(self, sound):
