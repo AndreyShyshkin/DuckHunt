@@ -1,4 +1,5 @@
-ORIG_W, ORIG_H = (800, 500)
+from .settings import ORIG_W, ORIG_H
+
 RENDER_W, RENDER_H = ORIG_W, ORIG_H
 
 def adjwidth (x):
