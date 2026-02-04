@@ -18,3 +18,14 @@ CROSSHAIRS_IMG = os.path.join(IMAGES_DIR, 'crosshairs.png')
 # Fonts
 FONT_FILE = os.path.join(FONTS_DIR, 'arcadeclassic.ttf')
 
+# Audio Volumes
+VOL_BARK = 0.7
+VOL_BLAST = 0.7
+VOL_DROP = 0.2
+VOL_FLYAWAY = 1.0
+VOL_GAMEOVER = 0.7
+VOL_HIT = 1.0
+VOL_NEXTROUND = 1.0
+VOL_POINT = 1.0
+VOL_QUACK = 0.7
+
