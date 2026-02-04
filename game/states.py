@@ -275,8 +275,8 @@ class PlayState(BaseState):
         self.gun.render()
 
 class RoundEndState(BaseState):
-    def __init__(self, hitDucks):
-        super(RoundEndState, self).__init__()
+    def init(self, hitDucks):
+        super(RoundEndState, self).init()
         self.isGameOver = False
         self.hitDucks = hitDucks
 
@@ -295,8 +295,8 @@ class RoundEndState(BaseState):
         pass
 
     def update(self):
-        while pygame.mixer.get_busy():
-            return
+        if pygame.mixer.get_busy():
+            return None 
 
         if self.isGameOver:
             return GameOverState()
