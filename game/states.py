@@ -54,9 +54,8 @@ class BaseState(object):
         surface = self.registry.get('surface')
         controlImgs = self.registry.get('controlImgs')
         font = pygame.font.Font(FONT, adjheight (20))
-        notices_list = list(self.notices)
-        line1 = font.render(str(notices_list[0]), True, (255, 255, 255))
-        line2 = font.render(str(notices_list[1]), True, (255, 255, 255))
+        line1 = font.render(str(self.notices[0]), True, (255, 255, 255))
+        line2 = font.render(str(self.notices[1]), True, (255, 255, 255))
         x, y = NOTICE_POSITION
         x1 = x + (NOTICE_WIDTH - line1.get_width()) // 2
         x2 = x + (NOTICE_WIDTH - line2.get_width()) // 2
@@ -162,7 +161,7 @@ class RoundStartState(BaseState):
                 self.dogPosition = (x + adjwidth (5)), (y + adjheight (5))
 
             elif (animationFrame > 2):
-                return
+                return 
 
         surface.blit(sprites, self.dogPosition, rect)
 
@@ -170,12 +169,12 @@ class PlayState(BaseState):
     def __init__(self):
         super(PlayState, self).__init__()
         self.ducks = [Duck(self.registry), Duck(self.registry)]
-        self.roundTime = 10
+        self.roundTime = 10 
         self.frame = 0
         self.dogCanComeOut = False
         self.dogPosition = DOG_REPORT_POSITION
         self.dogdy = 5
-        self.hitDuckIndex = 0
+        self.dogRectToDraw = None 
 
     def execute(self, event):
         if event.type == pygame.MOUSEMOTION:
@@ -194,7 +193,50 @@ class PlayState(BaseState):
         timer = int(time.time())
 
         if self.dogCanComeOut:
-            return
+            self.frame += 3
+            ducksShot = 0
+            for duck in self.ducks:
+                if duck.isDead:
+                    ducksShot += 1
+
+            rectSource = None
+            if ducksShot == 1:
+                rectSource = DOG_ONE_DUCK_RECT
+                if self.frame == 3:
+                    self.registry.get('soundHandler').enqueue('hit')
+            elif ducksShot == 2:
+                rectSource = DOG_TWO_DUCKS_RECT
+                if self.frame == 3:
+                    self.registry.get('soundHandler').enqueue('hit')
+            else:
+                rectSource = DOG_LAUGH_RECT
+                if self.frame == 3:
+                    self.registry.get('soundHandler').enqueue('flyaway')
+
+            x1, y1 = self.dogPosition
+            x_src, y_src, w_src, h_max = rectSource
+
+            current_visible_height = h_max
+
+            if self.frame < h_max:
+                self.dogPosition = x1, (y1 - 3)
+                current_visible_height = self.frame
+            else:
+                self.dogPosition = x1, (y1 + 3)
+                current_visible_height -= (self.frame - h_max)
+
+            if current_visible_height <= 0:
+                self.dogPosition = DOG_REPORT_POSITION
+                self.frame = 0
+                self.dogCanComeOut = False
+                self.ducks = [Duck(self.registry), Duck(self.registry)]
+                self.timer = timer
+                self.gun.reloadIt()
+                self.dogRectToDraw = None
+            else:
+                self.dogRectToDraw = (x_src, y_src, w_src, current_visible_height)
+            
+            return 
 
         for duck in self.ducks:
             duck.update()
@@ -227,45 +269,8 @@ class PlayState(BaseState):
         for duck in self.ducks:
             duck.render()
 
-        if self.dogCanComeOut:
-            self.frame += 3
-            ducksShot = 0
-            for duck in self.ducks:
-                if duck.isDead:
-                    ducksShot += 1
-
-            if ducksShot == 1:
-                x2, y2, width, height = DOG_ONE_DUCK_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('hit')
-
-            elif ducksShot == 2:
-                x2, y2, width, height = DOG_TWO_DUCKS_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('hit')
-
-            else:
-                x2, y2, width, height = DOG_LAUGH_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('flyaway')
-
-            x1, y1 = self.dogPosition
-            if self.frame < height:
-                self.dogPosition = x1, (y1 - 3)
-                height = self.frame
-            else:
-                self.dogPosition = x1, (y1 + 3)
-                height -= (self.frame - height)
-
-            if height <= 0:
-                self.dogPosition = DOG_REPORT_POSITION
-                self.frame = 0
-                self.dogCanComeOut = False
-                self.ducks = [Duck(self.registry), Duck(self.registry)]
-                self.timer = timer
-                self.gun.reloadIt()
-            else:
-                surface.blit(sprites, self.dogPosition, (x2, y2, width, height))
+        if self.dogCanComeOut and self.dogRectToDraw:
+            surface.blit(sprites, self.dogPosition, self.dogRectToDraw)
 
         self.gun.render()
 
@@ -279,7 +284,6 @@ class RoundEndState(BaseState):
         for i in self.hitDucks:
             if i == False:
                 missedCount += 1
-        
         if missedCount >= 4:
             self.isGameOver = True
             self.notices = ("GAMEOVER", "")
