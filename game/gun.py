@@ -1,5 +1,5 @@
 import pygame
-from . import settings
+from . import settings, states
 
 class Gun(object):
     def __init__(self, registry):
@@ -7,6 +7,7 @@ class Gun(object):
         self.rounds = settings.GUN_ROUNDS
         self.mousePos = (0,0) # Starting postion
         self.mouseImg = pygame.image.load(settings.CROSSHAIRS_IMG)
+        self.mouseImg = pygame.transform.scale(self.mouseImg, states.adjpos(*self.mouseImg.get_size()))
 
     def render(self):
         surface = self.registry.get('surface')

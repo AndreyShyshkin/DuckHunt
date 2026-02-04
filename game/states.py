@@ -5,34 +5,66 @@ from .gun import Gun
 from .duck import Duck
 from . import settings
 
-DOG_POSITION = adjpos (*settings.DOG_POS)
-DOG_FRAME = adjpos (*settings.DOG_FRAME_SIZE)
-DOG_REPORT_POSITION = adjpos (*settings.DOG_REPORT_POS)
-DOG_LAUGH_RECT = adjrect (*settings.DOG_LAUGH_RECT)
-DOG_ONE_DUCK_RECT = adjrect (*settings.DOG_ONE_DUCK_RECT)
-DOG_TWO_DUCKS_RECT = adjrect (*settings.DOG_TWO_DUCKS_RECT)
-HIT_POSITION = adjpos (*settings.HIT_POS)
-HIT_RECT = adjrect (*settings.HIT_RECT)
-HIT_DUCK_POSITION = adjpos (*settings.HIT_DUCK_POS)
-HIT_DUCK_WHITE_RECT = adjrect (*settings.HIT_DUCK_WHITE_RECT)
-HIT_DUCK_RED_RECT = adjrect (*settings.HIT_DUCK_RED_RECT)
-SCORE_POSITION = adjpos (*settings.SCORE_POS)
-SCORE_RECT = adjrect (*settings.SCORE_RECT)
+DOG_POSITION = None
+DOG_FRAME = None
+DOG_REPORT_POSITION = None
+DOG_LAUGH_RECT = None
+DOG_ONE_DUCK_RECT = None
+DOG_TWO_DUCKS_RECT = None
+HIT_POSITION = None
+HIT_RECT = None
+HIT_DUCK_POSITION = None
+HIT_DUCK_WHITE_RECT = None
+HIT_DUCK_RED_RECT = None
+SCORE_POSITION = None
+SCORE_RECT = None
 FONT = settings.FONT_FILE
-FONT_STARTING_POSITION = adjpos (*settings.FONT_START_POS)
+FONT_STARTING_POSITION = None
 FONT_GREEN = settings.COLOR_GREEN
 FONT_BLACK = settings.COLOR_BLACK
 FONT_WHITE = settings.COLOR_WHITE
-ROUND_POSITION = adjpos (*settings.ROUND_POS)
-SHOT_BG_POSITION = adjpos (*settings.SHOT_BG_POS)
-SHOT_POSITION = adjpos (*settings.SHOT_POS)
-SHOT_RECT = adjrect (*settings.SHOT_RECT)
-BULLET_RECT = adjrect (*settings.BULLET_RECT)
-NOTICE_POSITION = adjpos (*settings.NOTICE_POS)
-NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
-NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
-NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
-NOTICE_LINE_2_HEIGHT = adjwidth (settings.NOTICE_LINE_2_HEIGHT)
+ROUND_POSITION = None
+SHOT_BG_POSITION = None
+SHOT_POSITION = None
+SHOT_RECT = None
+BULLET_RECT = None
+NOTICE_POSITION = None
+NOTICE_RECT = None
+NOTICE_WIDTH = None
+NOTICE_LINE_1_HEIGHT = None
+NOTICE_LINE_2_HEIGHT = None
+
+def init():
+    global DOG_POSITION, DOG_FRAME, DOG_REPORT_POSITION, DOG_LAUGH_RECT, DOG_ONE_DUCK_RECT, DOG_TWO_DUCKS_RECT
+    global HIT_POSITION, HIT_RECT, HIT_DUCK_POSITION, HIT_DUCK_WHITE_RECT, HIT_DUCK_RED_RECT
+    global SCORE_POSITION, SCORE_RECT, FONT_STARTING_POSITION, ROUND_POSITION
+    global SHOT_BG_POSITION, SHOT_POSITION, SHOT_RECT, BULLET_RECT
+    global NOTICE_POSITION, NOTICE_RECT, NOTICE_WIDTH, NOTICE_LINE_1_HEIGHT, NOTICE_LINE_2_HEIGHT
+
+    DOG_POSITION = adjpos (*settings.DOG_POS)
+    DOG_FRAME = adjpos (*settings.DOG_FRAME_SIZE)
+    DOG_REPORT_POSITION = adjpos (*settings.DOG_REPORT_POS)
+    DOG_LAUGH_RECT = adjrect (*settings.DOG_LAUGH_RECT)
+    DOG_ONE_DUCK_RECT = adjrect (*settings.DOG_ONE_DUCK_RECT)
+    DOG_TWO_DUCKS_RECT = adjrect (*settings.DOG_TWO_DUCKS_RECT)
+    HIT_POSITION = adjpos (*settings.HIT_POS)
+    HIT_RECT = adjrect (*settings.HIT_RECT)
+    HIT_DUCK_POSITION = adjpos (*settings.HIT_DUCK_POS)
+    HIT_DUCK_WHITE_RECT = adjrect (*settings.HIT_DUCK_WHITE_RECT)
+    HIT_DUCK_RED_RECT = adjrect (*settings.HIT_DUCK_RED_RECT)
+    SCORE_POSITION = adjpos (*settings.SCORE_POS)
+    SCORE_RECT = adjrect (*settings.SCORE_RECT)
+    FONT_STARTING_POSITION = adjpos (*settings.FONT_START_POS)
+    ROUND_POSITION = adjpos (*settings.ROUND_POS)
+    SHOT_BG_POSITION = adjpos (*settings.SHOT_BG_POS)
+    SHOT_POSITION = adjpos (*settings.SHOT_POS)
+    SHOT_RECT = adjrect (*settings.SHOT_RECT)
+    BULLET_RECT = adjrect (*settings.BULLET_RECT)
+    NOTICE_POSITION = adjpos (*settings.NOTICE_POS)
+    NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
+    NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
+    NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
+    NOTICE_LINE_2_HEIGHT = adjwidth (settings.NOTICE_LINE_2_HEIGHT)
 
 registry = None
 
@@ -100,6 +132,7 @@ class BaseState(object):
 
 class StartState(BaseState):
     def __init__(self, reg):
+        super(StartState, self).__init__() # Add super init call
         global registry
         registry = reg
 

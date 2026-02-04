@@ -17,6 +17,8 @@ pygame.display.set_caption(TITLE)
 pygame.mouse.set_visible(False)
 
 import game.driver
+import game.states
+import game.duck
 
 class Game(object):
     def __init__(self, width, height):
@@ -74,6 +76,10 @@ if __name__ == "__main__":
 
     # Update global settings
     init_screen_params(args.width, args.height)
+    # Recalculate coordinates based on new screen params
+    game.states.init()
+    game.duck.init()
+
     game.settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
 
     # Adjust difficulty (speed multiplier)
