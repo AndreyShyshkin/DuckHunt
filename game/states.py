@@ -41,30 +41,76 @@ def init():
     global SHOT_BG_POSITION, SHOT_POSITION, SHOT_RECT, BULLET_RECT
     global NOTICE_POSITION, NOTICE_RECT, NOTICE_WIDTH, NOTICE_LINE_1_HEIGHT, NOTICE_LINE_2_HEIGHT
 
+    # Standard World Objects scaling
     DOG_POSITION = adjpos (*settings.DOG_POS)
     DOG_FRAME = adjpos (*settings.DOG_FRAME_SIZE)
     DOG_REPORT_POSITION = adjpos (*settings.DOG_REPORT_POS)
     DOG_LAUGH_RECT = adjrect (*settings.DOG_LAUGH_RECT)
     DOG_ONE_DUCK_RECT = adjrect (*settings.DOG_ONE_DUCK_RECT)
     DOG_TWO_DUCKS_RECT = adjrect (*settings.DOG_TWO_DUCKS_RECT)
-    HIT_POSITION = adjpos (*settings.HIT_POS)
+
+    # Rect definitions
     HIT_RECT = adjrect (*settings.HIT_RECT)
-    HIT_DUCK_POSITION = adjpos (*settings.HIT_DUCK_POS)
     HIT_DUCK_WHITE_RECT = adjrect (*settings.HIT_DUCK_WHITE_RECT)
     HIT_DUCK_RED_RECT = adjrect (*settings.HIT_DUCK_RED_RECT)
-    SCORE_POSITION = adjpos (*settings.SCORE_POS)
     SCORE_RECT = adjrect (*settings.SCORE_RECT)
-    FONT_STARTING_POSITION = adjpos (*settings.FONT_START_POS)
-    ROUND_POSITION = adjpos (*settings.ROUND_POS)
-    SHOT_BG_POSITION = adjpos (*settings.SHOT_BG_POS)
-    SHOT_POSITION = adjpos (*settings.SHOT_POS)
     SHOT_RECT = adjrect (*settings.SHOT_RECT)
     BULLET_RECT = adjrect (*settings.BULLET_RECT)
-    NOTICE_POSITION = adjpos (*settings.NOTICE_POS)
+
+    screen_width = adjwidth(settings.ORIG_W)
+
+    # Calculate widths of HUD blocks
+    shot_width = adjwidth(70)   # settings.SHOT_RECT width
+    hit_width = adjwidth(287)   # settings.HIT_RECT width
+    score_width = adjwidth(130) # settings.SCORE_RECT width
+
+    # Calculate spacing to center elements
+    # Elements: [Shot] [Hit] [Score]
+    # We want 4 equal gaps: | gap | Shot | gap | Hit | gap | Score | gap |
+    total_block_width = shot_width + hit_width + score_width
+    available_space = screen_width - total_block_width
+    gap = available_space // 4
+
+    # Base Y position (all aligned at bottom)
+    base_y = adjheight(settings.HIT_POS[1]) # 440 usually
+
+    # 1. Shot Position
+    shot_x = gap
+    SHOT_POSITION = (shot_x, base_y)
+    SHOT_BG_POSITION = (shot_x, base_y)
+
+    # Round Position (relative to Shot, slightly above)
+    round_y_offset = adjheight(settings.ROUND_POS[1] - settings.SHOT_POS[1]) # 410 - 440 = -30
+    ROUND_POSITION = (shot_x, base_y + round_y_offset)
+
+    # 2. Hit Position
+    hit_x = shot_x + shot_width + gap
+    HIT_POSITION = (hit_x, base_y)
+
+    # Hit Ducks (relative to Hit bar)
+    hit_duck_offset_x = adjwidth(settings.HIT_DUCK_POS[0] - settings.HIT_POS[0])
+    hit_duck_offset_y = adjheight(settings.HIT_DUCK_POS[1] - settings.HIT_POS[1])
+    HIT_DUCK_POSITION = (hit_x + hit_duck_offset_x, base_y + hit_duck_offset_y)
+
+    # 3. Score Position
+    score_x = hit_x + hit_width + gap
+    SCORE_POSITION = (score_x, base_y)
+
+    # Score Text (relative to Score box)
+    score_text_offset_x = adjwidth(settings.FONT_START_POS[0] - settings.SCORE_POS[0])
+    score_text_offset_y = adjheight(settings.FONT_START_POS[1] - settings.SCORE_POS[1])
+    FONT_STARTING_POSITION = (score_x + score_text_offset_x, base_y + score_text_offset_y)
+
+    # --- Notice Box Centering ---
     NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
     NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
     NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
     NOTICE_LINE_2_HEIGHT = adjheight (settings.NOTICE_LINE_2_HEIGHT)
+
+    # Center notice box
+    notice_x = (screen_width - NOTICE_WIDTH) // 2
+    notice_y = adjheight(settings.NOTICE_POS[1])
+    NOTICE_POSITION = (notice_x, notice_y)
 
 registry = None
 
