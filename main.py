@@ -1,10 +1,11 @@
 import os, sys
 import pygame
 import pygame.transform
-from game.registry import adjpos
+import argparse
+from game.registry import init_screen_params
+import game.settings
 
 # Game parameters
-SCREEN_WIDTH, SCREEN_HEIGHT = adjpos (800, 500)
 TITLE = "Duck Hunt"
 FRAMES_PER_SEC = 50
 BG_COLOR = 255, 255, 255
@@ -18,11 +19,11 @@ pygame.mouse.set_visible(False)
 import game.driver
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, width, height):
         self.running = True
         self.surface = None
         self.clock = pygame.time.Clock()
-        self.size = SCREEN_WIDTH, SCREEN_HEIGHT
+        self.size = width, height
         background = os.path.join('assets/images', 'background.jpg')
         bg = pygame.image.load(background)
         self.background = pygame.transform.smoothscale (bg, self.size)
@@ -63,5 +64,25 @@ class Game(object):
         self.cleanup()
 
 if __name__ == "__main__":
-    theGame = Game()
+    parser = argparse.ArgumentParser(description="Duck Hunt Game")
+    parser.add_argument('--width', type=int, default=800, help='Screen width (default: 800)')
+    parser.add_argument('--height', type=int, default=500, help='Screen height (default: 500)')
+    parser.add_argument('--volume', type=float, default=1.0, help='Master volume (0.0 to 1.0, default: 1.0)')
+    parser.add_argument('--difficulty', type=int, default=1, help='Difficulty level (1: Normal, 2: Fast, 3: Hard, default: 1)')
+
+    args = parser.parse_args()
+
+    # Update global settings
+    init_screen_params(args.width, args.height)
+    game.settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
+
+    # Adjust difficulty (speed multiplier)
+    # Level 1: 4-6
+    # Level 2: 6-8
+    # Level 3: 8-10
+    speed_boost = (args.difficulty - 1) * 2
+    game.settings.DUCK_SPEED_MIN += speed_boost
+    game.settings.DUCK_SPEED_MAX += speed_boost
+
+    theGame = Game(args.width, args.height)
     theGame.execute()
