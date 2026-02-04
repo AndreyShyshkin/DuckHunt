@@ -19,6 +19,7 @@ CROSSHAIRS_IMG = os.path.join(IMAGES_DIR, 'crosshairs.png')
 FONT_FILE = os.path.join(FONTS_DIR, 'arcadeclassic.ttf')
 
 # Audio Volumes
+GLOBAL_VOLUME = 1.0
 VOL_BARK = 0.7
 VOL_BLAST = 0.7
 VOL_DROP = 0.2
@@ -28,6 +29,10 @@ VOL_HIT = 1.0
 VOL_NEXTROUND = 1.0
 VOL_POINT = 1.0
 VOL_QUACK = 0.7
+
+# Difficulty
+DUCK_SPEED_MIN = 4
+DUCK_SPEED_MAX = 6
 
 # Colors
 COLOR_GREEN = (154, 233, 0)
