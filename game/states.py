@@ -1,37 +1,114 @@
-import os, time
+import time
 import pygame
 from .registry import adjpos, adjrect, adjwidth, adjheight
 from .gun import Gun
 from .duck import Duck
+from . import settings
 
-DOG_POSITION = adjpos (250, 350)
-DOG_FRAME = adjpos (122, 110)
-DOG_REPORT_POSITION = adjpos (450, 325)
-DOG_LAUGH_RECT = adjrect (385, 120, 80, 85)
-DOG_ONE_DUCK_RECT = adjrect (650, 0, 100, 100)
-DOG_TWO_DUCKS_RECT = adjrect (630, 115, 120, 100)
-HIT_POSITION = adjpos (245, 440)
-HIT_RECT = adjrect (0, 0, 287, 43)
-HIT_DUCK_POSITION = adjpos (329, 445)
-HIT_DUCK_WHITE_RECT = adjrect (218, 44, 18, 15)
-HIT_DUCK_RED_RECT = adjrect (200, 44, 18, 15)
-SCORE_POSITION = adjpos (620, 440)
-SCORE_RECT = adjrect (69, 43, 130, 43)
-FONT = os.path.join('media', 'arcadeclassic.ttf')
-FONT_STARTING_POSITION = adjpos (730, 442)
-FONT_GREEN = 154, 233, 0
-FONT_BLACK = 0, 0, 0
-FONT_WHITE = 255, 255, 255
-ROUND_POSITION = adjpos (60, 410)
-SHOT_BG_POSITION = adjpos (60, 440)
-SHOT_POSITION = adjpos (60, 440)
-SHOT_RECT = adjrect (0, 43, 70, 43)
-BULLET_RECT = adjrect (200, 59, 13, 17)
-NOTICE_POSITION = adjpos (370, 120)
-NOTICE_RECT = adjrect (0, 86, 128, 63)
-NOTICE_WIDTH = adjwidth (128)
-NOTICE_LINE_1_HEIGHT = adjheight (128)
-NOTICE_LINE_2_HEIGHT = adjwidth (150)
+DOG_POSITION = None
+DOG_FRAME = None
+DOG_REPORT_POSITION = None
+DOG_LAUGH_RECT = None
+DOG_ONE_DUCK_RECT = None
+DOG_TWO_DUCKS_RECT = None
+HIT_POSITION = None
+HIT_RECT = None
+HIT_DUCK_POSITION = None
+HIT_DUCK_WHITE_RECT = None
+HIT_DUCK_RED_RECT = None
+SCORE_POSITION = None
+SCORE_RECT = None
+FONT = settings.FONT_FILE
+FONT_STARTING_POSITION = None
+FONT_GREEN = settings.COLOR_GREEN
+FONT_BLACK = settings.COLOR_BLACK
+FONT_WHITE = settings.COLOR_WHITE
+ROUND_POSITION = None
+SHOT_BG_POSITION = None
+SHOT_POSITION = None
+SHOT_RECT = None
+BULLET_RECT = None
+NOTICE_POSITION = None
+NOTICE_RECT = None
+NOTICE_WIDTH = None
+NOTICE_LINE_1_HEIGHT = None
+NOTICE_LINE_2_HEIGHT = None
+
+def init():
+    global DOG_POSITION, DOG_FRAME, DOG_REPORT_POSITION, DOG_LAUGH_RECT, DOG_ONE_DUCK_RECT, DOG_TWO_DUCKS_RECT
+    global HIT_POSITION, HIT_RECT, HIT_DUCK_POSITION, HIT_DUCK_WHITE_RECT, HIT_DUCK_RED_RECT
+    global SCORE_POSITION, SCORE_RECT, FONT_STARTING_POSITION, ROUND_POSITION
+    global SHOT_BG_POSITION, SHOT_POSITION, SHOT_RECT, BULLET_RECT
+    global NOTICE_POSITION, NOTICE_RECT, NOTICE_WIDTH, NOTICE_LINE_1_HEIGHT, NOTICE_LINE_2_HEIGHT
+
+    # Standard World Objects scaling
+    DOG_POSITION = adjpos (*settings.DOG_POS)
+    DOG_FRAME = adjpos (*settings.DOG_FRAME_SIZE)
+    DOG_REPORT_POSITION = adjpos (*settings.DOG_REPORT_POS)
+    DOG_LAUGH_RECT = adjrect (*settings.DOG_LAUGH_RECT)
+    DOG_ONE_DUCK_RECT = adjrect (*settings.DOG_ONE_DUCK_RECT)
+    DOG_TWO_DUCKS_RECT = adjrect (*settings.DOG_TWO_DUCKS_RECT)
+
+    # Rect definitions
+    HIT_RECT = adjrect (*settings.HIT_RECT)
+    HIT_DUCK_WHITE_RECT = adjrect (*settings.HIT_DUCK_WHITE_RECT)
+    HIT_DUCK_RED_RECT = adjrect (*settings.HIT_DUCK_RED_RECT)
+    SCORE_RECT = adjrect (*settings.SCORE_RECT)
+    SHOT_RECT = adjrect (*settings.SHOT_RECT)
+    BULLET_RECT = adjrect (*settings.BULLET_RECT)
+
+    screen_width = adjwidth(settings.ORIG_W)
+
+    # Calculate widths of HUD blocks
+    shot_width = adjwidth(70)   # settings.SHOT_RECT width
+    hit_width = adjwidth(287)   # settings.HIT_RECT width
+    score_width = adjwidth(130) # settings.SCORE_RECT width
+
+    # Calculate spacing to center elements
+    total_block_width = shot_width + hit_width + score_width
+    available_space = screen_width - total_block_width
+    gap = available_space // 4
+
+    # Base Y position (all aligned at bottom)
+    base_y = adjheight(settings.HIT_POS[1])
+
+    # 1. Shot Position
+    shot_x = gap
+    SHOT_POSITION = (shot_x, base_y)
+    SHOT_BG_POSITION = (shot_x, base_y)
+
+    # Round Position (relative to Shot, slightly above)
+    round_y_offset = adjheight(settings.ROUND_POS[1] - settings.SHOT_POS[1])
+    ROUND_POSITION = (shot_x, base_y + round_y_offset)
+
+    # 2. Hit Position
+    hit_x = shot_x + shot_width + gap
+    HIT_POSITION = (hit_x, base_y)
+
+    # Hit Ducks (relative to Hit bar)
+    hit_duck_offset_x = adjwidth(settings.HIT_DUCK_POS[0] - settings.HIT_POS[0])
+    hit_duck_offset_y = adjheight(settings.HIT_DUCK_POS[1] - settings.HIT_POS[1])
+    HIT_DUCK_POSITION = (hit_x + hit_duck_offset_x, base_y + hit_duck_offset_y)
+
+    # 3. Score Position
+    score_x = hit_x + hit_width + gap
+    SCORE_POSITION = (score_x, base_y)
+
+    # Score Text
+    score_text_offset_x = adjwidth(settings.FONT_START_POS[0] - settings.SCORE_POS[0])
+    score_text_offset_y = adjheight(settings.FONT_START_POS[1] - settings.SCORE_POS[1])
+    FONT_STARTING_POSITION = (score_x + score_text_offset_x, base_y + score_text_offset_y)
+
+    # Notice Box Centering
+    NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
+    NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
+    NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
+    NOTICE_LINE_2_HEIGHT = adjheight (settings.NOTICE_LINE_2_HEIGHT)
+
+    # Center notice box
+    notice_x = (screen_width - NOTICE_WIDTH) // 2
+    notice_y = adjheight(settings.NOTICE_POS[1])
+    NOTICE_POSITION = (notice_x, notice_y)
 
 registry = None
 
@@ -70,8 +147,8 @@ class BaseState(object):
         controlImgs = self.registry.get('controlImgs')
 
         font = pygame.font.Font(FONT, adjheight (20))
-        text = font.render(("R= %d" % round), True, FONT_GREEN, FONT_BLACK);
-        surface.blit(text, ROUND_POSITION);
+        text = font.render(("R= %d" % round), True, FONT_GREEN, FONT_BLACK)
+        surface.blit(text, ROUND_POSITION)
 
         startingX, startingY = SHOT_POSITION
         surface.blit(controlImgs, SHOT_POSITION, SHOT_RECT)
@@ -92,13 +169,14 @@ class BaseState(object):
 
         surface.blit(img, SCORE_POSITION, SCORE_RECT)
         font = pygame.font.Font(FONT, adjheight (20))
-        text = font.render(str(self.registry.get('score')), True, FONT_WHITE);
+        text = font.render(str(self.registry.get('score')), True, FONT_WHITE)
         x, y = FONT_STARTING_POSITION
-        x -= text.get_width();
-        surface.blit(text, (x,y));
+        x -= text.get_width()
+        surface.blit(text, (x,y))
 
 class StartState(BaseState):
     def __init__(self, reg):
+        super(StartState, self).__init__() # Add super init call
         global registry
         registry = reg
 
@@ -275,8 +353,8 @@ class PlayState(BaseState):
         self.gun.render()
 
 class RoundEndState(BaseState):
-    def init(self, hitDucks):
-        super(RoundEndState, self).init()
+    def __init__(self, hitDucks):
+        super(RoundEndState, self).__init__()
         self.isGameOver = False
         self.hitDucks = hitDucks
 

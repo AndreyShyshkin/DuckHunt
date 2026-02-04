@@ -1,10 +1,18 @@
 import  random
 from .registry import adjpos, adjheight
+from . import settings
 
-FRAME_SIZE = adjpos (81, 75)
-XOFFSET, YOFFSET = adjpos (250, 225)
-FLYOFF_YOFFSET = YOFFSET + adjheight (155)
-FALL_YOFFSET = YOFFSET + adjheight (235)
+FRAME_SIZE = None
+XOFFSET, YOFFSET = None, None
+FLYOFF_YOFFSET = None
+FALL_YOFFSET = None
+
+def init():
+    global FRAME_SIZE, XOFFSET, YOFFSET, FLYOFF_YOFFSET, FALL_YOFFSET
+    FRAME_SIZE = adjpos (settings.DUCK_FRAME_W, settings.DUCK_FRAME_H)
+    XOFFSET, YOFFSET = adjpos (settings.DUCK_X_OFFSET, settings.DUCK_Y_OFFSET)
+    FLYOFF_YOFFSET = YOFFSET + adjheight (settings.DUCK_FLYOFF_Y_OFFSET)
+    FALL_YOFFSET = YOFFSET + adjheight (settings.DUCK_FALL_Y_OFFSET)
 
 class Duck(object):
 
@@ -18,7 +26,7 @@ class Duck(object):
         self.rsprites = registry.get('rsprites')
 
         # Animation
-        self.animationDelay = 8
+        self.animationDelay = settings.DUCK_ANIMATION_DELAY
         self.frame = 0
         self.animationFrame = 0
         self.justShot = False
@@ -129,7 +137,12 @@ class Duck(object):
         surface = self.registry.get('surface')
         round = self.registry.get('round')
         frameWidth, frameHeight = FRAME_SIZE
-        speedRange = range(4+round, 6+round)
+
+        # Calculate speed range
+        min_speed = settings.DUCK_SPEED_MIN + round
+        max_speed = settings.DUCK_SPEED_MAX + round
+        speedRange = range(min_speed, max_speed)
+
         x, y = self.position
         coinToss = 1 if random.randint(0, 1) else -1
 

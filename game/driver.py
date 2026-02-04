@@ -1,6 +1,5 @@
-import os
 import pygame
-from . import registry, states, sounds
+from . import registry, states, sounds, settings
 
 class Driver(object):
     def __init__(self, surface):
@@ -10,11 +9,11 @@ class Driver(object):
         self.registry.set('soundHandler', sounds.SoundHandler())
 
         
-        controls = pygame.image.load(os.path.join('assets', 'images', 'controls.png')).convert_alpha()
+        controls = pygame.image.load(settings.CONTROLS_IMG).convert_alpha()
         self.registry.set('controlImgs', pygame.transform.smoothscale (controls, states.adjpos (*controls.get_size ())))
 
         
-        sprites = pygame.image.load(os.path.join('assets', 'images', 'sprites.png')).convert_alpha()
+        sprites = pygame.image.load(settings.SPRITES_IMG).convert_alpha()
         sprites = pygame.transform.scale (sprites, states.adjpos (*sprites.get_size ()))
         self.registry.set('sprites', sprites)
         

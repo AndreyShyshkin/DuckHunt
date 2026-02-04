@@ -1,19 +1,20 @@
-import os
 import pygame
+from . import settings, states
 
 class Gun(object):
     def __init__(self, registry):
         self.registry = registry
-        self.rounds = 3
+        self.rounds = settings.GUN_ROUNDS
         self.mousePos = (0,0) # Starting postion
-        self.mouseImg = pygame.image.load(os.path.join('assets/img', 'crosshairs.png'))
+        self.mouseImg = pygame.image.load(settings.CROSSHAIRS_IMG)
+        self.mouseImg = pygame.transform.scale(self.mouseImg, states.adjpos(*self.mouseImg.get_size()))
 
     def render(self):
         surface = self.registry.get('surface')
         surface.blit(self.mouseImg, self.mousePos)
 
     def reloadIt(self):
-        self.rounds = 3
+        self.rounds = settings.GUN_ROUNDS
 
     def moveCrossHairs(self, pos):
         xOffset = self.mouseImg.get_width() // 2
