@@ -64,7 +64,7 @@ def init():
     NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
     NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
     NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
-    NOTICE_LINE_2_HEIGHT = adjwidth (settings.NOTICE_LINE_2_HEIGHT)
+    NOTICE_LINE_2_HEIGHT = adjheight (settings.NOTICE_LINE_2_HEIGHT)
 
 registry = None
 

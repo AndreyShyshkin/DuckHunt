@@ -17,7 +17,7 @@ def adjpos (x, y):
     return (adjwidth (x), adjheight (y))
 
 def adjrect (a, b, c, d):
-    return (adjwidth (a), adjheight (b), adjwidth (c), adjwidth (d))
+    return (adjwidth (a), adjheight (b), adjwidth (c), adjheight (d))
 
 class Registry(object):
     def __init__(self):
