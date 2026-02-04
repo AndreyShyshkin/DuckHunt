@@ -2,6 +2,11 @@ from .settings import ORIG_W, ORIG_H
 
 RENDER_W, RENDER_H = ORIG_W, ORIG_H
 
+def init_screen_params(width, height):
+    global RENDER_W, RENDER_H
+    RENDER_W = width
+    RENDER_H = height
+
 def adjwidth (x):
     return (RENDER_W * x) // ORIG_W
 
