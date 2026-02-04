@@ -5,7 +5,7 @@ from . import settings
 def getSound(name, volume):
     soundPath = os.path.join(settings.AUDIO_DIR, name)
     sound = pygame.mixer.Sound(soundPath)
-    sound.set_volume(volume)
+    sound.set_volume(volume * settings.GLOBAL_VOLUME)
     return sound
 
 class SoundHandler:
