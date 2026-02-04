@@ -71,8 +71,8 @@ class BaseState(object):
         controlImgs = self.registry.get('controlImgs')
 
         font = pygame.font.Font(FONT, adjheight (20))
-        text = font.render(("R= %d" % round), True, FONT_GREEN, FONT_BLACK);
-        surface.blit(text, ROUND_POSITION);
+        text = font.render(("R= %d" % round), True, FONT_GREEN, FONT_BLACK)
+        surface.blit(text, ROUND_POSITION)
 
         startingX, startingY = SHOT_POSITION
         surface.blit(controlImgs, SHOT_POSITION, SHOT_RECT)
@@ -93,10 +93,10 @@ class BaseState(object):
 
         surface.blit(img, SCORE_POSITION, SCORE_RECT)
         font = pygame.font.Font(FONT, adjheight (20))
-        text = font.render(str(self.registry.get('score')), True, FONT_WHITE);
+        text = font.render(str(self.registry.get('score')), True, FONT_WHITE)
         x, y = FONT_STARTING_POSITION
-        x -= text.get_width();
-        surface.blit(text, (x,y));
+        x -= text.get_width()
+        surface.blit(text, (x,y))
 
 class StartState(BaseState):
     def __init__(self, reg):
@@ -276,8 +276,8 @@ class PlayState(BaseState):
         self.gun.render()
 
 class RoundEndState(BaseState):
-    def init(self, hitDucks):
-        super(RoundEndState, self).init()
+    def __init__(self, hitDucks):
+        super(RoundEndState, self).__init__()
         self.isGameOver = False
         self.hitDucks = hitDucks
 
