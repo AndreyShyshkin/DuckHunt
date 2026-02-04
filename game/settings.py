@@ -15,3 +15,6 @@ CONTROLS_IMG = os.path.join(IMAGES_DIR, 'controls.png')
 SPRITES_IMG = os.path.join(IMAGES_DIR, 'sprites.png')
 CROSSHAIRS_IMG = os.path.join(IMAGES_DIR, 'crosshairs.png')
 
+# Fonts
+FONT_FILE = os.path.join(FONTS_DIR, 'arcadeclassic.ttf')
+
