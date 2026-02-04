@@ -1,7 +1,7 @@
 import os
 import pygame
 
-SOUNDS_DIR = "assets/img"
+SOUNDS_DIR = "assets/audio"
 
 def getSound(name, volume):
     soundPath = os.path.join(SOUNDS_DIR, name)
