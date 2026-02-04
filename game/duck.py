@@ -1,10 +1,11 @@
 import  random
 from .registry import adjpos, adjheight
+from . import settings
 
-FRAME_SIZE = adjpos (81, 75)
-XOFFSET, YOFFSET = adjpos (250, 225)
-FLYOFF_YOFFSET = YOFFSET + adjheight (155)
-FALL_YOFFSET = YOFFSET + adjheight (235)
+FRAME_SIZE = adjpos (settings.DUCK_FRAME_W, settings.DUCK_FRAME_H)
+XOFFSET, YOFFSET = adjpos (settings.DUCK_X_OFFSET, settings.DUCK_Y_OFFSET)
+FLYOFF_YOFFSET = YOFFSET + adjheight (settings.DUCK_FLYOFF_Y_OFFSET)
+FALL_YOFFSET = YOFFSET + adjheight (settings.DUCK_FALL_Y_OFFSET)
 
 class Duck(object):
 
@@ -18,7 +19,7 @@ class Duck(object):
         self.rsprites = registry.get('rsprites')
 
         # Animation
-        self.animationDelay = 8
+        self.animationDelay = settings.DUCK_ANIMATION_DELAY
         self.frame = 0
         self.animationFrame = 0
         self.justShot = False
