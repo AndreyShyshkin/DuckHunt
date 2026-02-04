@@ -65,14 +65,12 @@ def init():
     score_width = adjwidth(130) # settings.SCORE_RECT width
 
     # Calculate spacing to center elements
-    # Elements: [Shot] [Hit] [Score]
-    # We want 4 equal gaps: | gap | Shot | gap | Hit | gap | Score | gap |
     total_block_width = shot_width + hit_width + score_width
     available_space = screen_width - total_block_width
     gap = available_space // 4
 
     # Base Y position (all aligned at bottom)
-    base_y = adjheight(settings.HIT_POS[1]) # 440 usually
+    base_y = adjheight(settings.HIT_POS[1])
 
     # 1. Shot Position
     shot_x = gap
@@ -80,7 +78,7 @@ def init():
     SHOT_BG_POSITION = (shot_x, base_y)
 
     # Round Position (relative to Shot, slightly above)
-    round_y_offset = adjheight(settings.ROUND_POS[1] - settings.SHOT_POS[1]) # 410 - 440 = -30
+    round_y_offset = adjheight(settings.ROUND_POS[1] - settings.SHOT_POS[1])
     ROUND_POSITION = (shot_x, base_y + round_y_offset)
 
     # 2. Hit Position
@@ -96,12 +94,12 @@ def init():
     score_x = hit_x + hit_width + gap
     SCORE_POSITION = (score_x, base_y)
 
-    # Score Text (relative to Score box)
+    # Score Text
     score_text_offset_x = adjwidth(settings.FONT_START_POS[0] - settings.SCORE_POS[0])
     score_text_offset_y = adjheight(settings.FONT_START_POS[1] - settings.SCORE_POS[1])
     FONT_STARTING_POSITION = (score_x + score_text_offset_x, base_y + score_text_offset_y)
 
-    # --- Notice Box Centering ---
+    # Notice Box Centering
     NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
     NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
     NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
