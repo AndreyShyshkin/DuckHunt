@@ -10,3 +10,8 @@ IMAGES_DIR = os.path.join(ASSETS_DIR, 'images')
 AUDIO_DIR = os.path.join(ASSETS_DIR, 'audio')
 FONTS_DIR = os.path.join(ASSETS_DIR, 'fonts')
 
+# Images
+CONTROLS_IMG = os.path.join(IMAGES_DIR, 'controls.png')
+SPRITES_IMG = os.path.join(IMAGES_DIR, 'sprites.png')
+CROSSHAIRS_IMG = os.path.join(IMAGES_DIR, 'crosshairs.png')
+
