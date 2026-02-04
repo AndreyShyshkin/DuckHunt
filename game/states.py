@@ -1,37 +1,38 @@
-import os, time
+import time
 import pygame
 from .registry import adjpos, adjrect, adjwidth, adjheight
 from .gun import Gun
 from .duck import Duck
+from . import settings
 
-DOG_POSITION = adjpos (250, 350)
-DOG_FRAME = adjpos (122, 110)
-DOG_REPORT_POSITION = adjpos (450, 325)
-DOG_LAUGH_RECT = adjrect (385, 120, 80, 85)
-DOG_ONE_DUCK_RECT = adjrect (650, 0, 100, 100)
-DOG_TWO_DUCKS_RECT = adjrect (630, 115, 120, 100)
-HIT_POSITION = adjpos (245, 440)
-HIT_RECT = adjrect (0, 0, 287, 43)
-HIT_DUCK_POSITION = adjpos (329, 445)
-HIT_DUCK_WHITE_RECT = adjrect (218, 44, 18, 15)
-HIT_DUCK_RED_RECT = adjrect (200, 44, 18, 15)
-SCORE_POSITION = adjpos (620, 440)
-SCORE_RECT = adjrect (69, 43, 130, 43)
-FONT = os.path.join('media', 'arcadeclassic.ttf')
-FONT_STARTING_POSITION = adjpos (730, 442)
-FONT_GREEN = 154, 233, 0
-FONT_BLACK = 0, 0, 0
-FONT_WHITE = 255, 255, 255
-ROUND_POSITION = adjpos (60, 410)
-SHOT_BG_POSITION = adjpos (60, 440)
-SHOT_POSITION = adjpos (60, 440)
-SHOT_RECT = adjrect (0, 43, 70, 43)
-BULLET_RECT = adjrect (200, 59, 13, 17)
-NOTICE_POSITION = adjpos (370, 120)
-NOTICE_RECT = adjrect (0, 86, 128, 63)
-NOTICE_WIDTH = adjwidth (128)
-NOTICE_LINE_1_HEIGHT = adjheight (128)
-NOTICE_LINE_2_HEIGHT = adjwidth (150)
+DOG_POSITION = adjpos (*settings.DOG_POS)
+DOG_FRAME = adjpos (*settings.DOG_FRAME_SIZE)
+DOG_REPORT_POSITION = adjpos (*settings.DOG_REPORT_POS)
+DOG_LAUGH_RECT = adjrect (*settings.DOG_LAUGH_RECT)
+DOG_ONE_DUCK_RECT = adjrect (*settings.DOG_ONE_DUCK_RECT)
+DOG_TWO_DUCKS_RECT = adjrect (*settings.DOG_TWO_DUCKS_RECT)
+HIT_POSITION = adjpos (*settings.HIT_POS)
+HIT_RECT = adjrect (*settings.HIT_RECT)
+HIT_DUCK_POSITION = adjpos (*settings.HIT_DUCK_POS)
+HIT_DUCK_WHITE_RECT = adjrect (*settings.HIT_DUCK_WHITE_RECT)
+HIT_DUCK_RED_RECT = adjrect (*settings.HIT_DUCK_RED_RECT)
+SCORE_POSITION = adjpos (*settings.SCORE_POS)
+SCORE_RECT = adjrect (*settings.SCORE_RECT)
+FONT = settings.FONT_FILE
+FONT_STARTING_POSITION = adjpos (*settings.FONT_START_POS)
+FONT_GREEN = settings.COLOR_GREEN
+FONT_BLACK = settings.COLOR_BLACK
+FONT_WHITE = settings.COLOR_WHITE
+ROUND_POSITION = adjpos (*settings.ROUND_POS)
+SHOT_BG_POSITION = adjpos (*settings.SHOT_BG_POS)
+SHOT_POSITION = adjpos (*settings.SHOT_POS)
+SHOT_RECT = adjrect (*settings.SHOT_RECT)
+BULLET_RECT = adjrect (*settings.BULLET_RECT)
+NOTICE_POSITION = adjpos (*settings.NOTICE_POS)
+NOTICE_RECT = adjrect (*settings.NOTICE_RECT)
+NOTICE_WIDTH = adjwidth (settings.NOTICE_WIDTH)
+NOTICE_LINE_1_HEIGHT = adjheight (settings.NOTICE_LINE_1_HEIGHT)
+NOTICE_LINE_2_HEIGHT = adjwidth (settings.NOTICE_LINE_2_HEIGHT)
 
 registry = None
 
