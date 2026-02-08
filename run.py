@@ -1,8 +1,5 @@
 import argparse
 import pygame
-import sys
-
-sys.path.append('src')
 
 from duckhunt.core import settings
 from duckhunt.utils.registry import init_screen_params
