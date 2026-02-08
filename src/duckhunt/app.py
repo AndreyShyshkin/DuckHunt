@@ -17,6 +17,10 @@ class Game(object):
         self.background = pygame.transform.smoothscale(bg, self.size)
         self.driver = None
 
+        self.accumulator = 0.0
+        self.logic_update_rate = 60.0
+        self.dt = 1.0 / self.logic_update_rate
+
     def init(self):
         self.surface = pygame.display.set_mode(self.size)
         self.driver = driver.Driver(self.surface)
@@ -28,8 +32,16 @@ class Game(object):
             self.driver.handleEvent(event)
 
     def loop(self):
-        self.clock.tick(settings.FRAMES_PER_SEC)
-        self.driver.update()
+        frame_time = self.clock.tick(settings.FRAMES_PER_SEC) / 1000.0
+
+        if frame_time > 0.25:
+            frame_time = 0.25
+
+        self.accumulator += frame_time
+
+        while self.accumulator >= self.dt:
+            self.driver.update()
+            self.accumulator -= self.dt
 
     def render(self):
         self.surface.blit(self.background, (0,0))
