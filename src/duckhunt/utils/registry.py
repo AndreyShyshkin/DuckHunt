@@ -1,4 +1,4 @@
-from src.duckhunt.core.settings import ORIG_W, ORIG_H
+from duckhunt.core.settings import ORIG_W, ORIG_H
 
 RENDER_W, RENDER_H = ORIG_W, ORIG_H
 

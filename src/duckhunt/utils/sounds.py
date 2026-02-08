@@ -1,6 +1,6 @@
 import os
 import pygame
-from src.duckhunt.core import settings
+from duckhunt.core import settings
 
 
 def getSound(name, volume):

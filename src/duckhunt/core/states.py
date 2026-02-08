@@ -1,9 +1,9 @@
 import time
 import pygame
-from src.duckhunt.utils.registry import adjpos, adjrect, adjwidth, adjheight
-from src.duckhunt.entities.gun import Gun
-from src.duckhunt.entities.duck import Duck
-from src.duckhunt.core import settings
+from duckhunt.utils.registry import adjpos, adjrect, adjwidth, adjheight
+from duckhunt.entities.gun import Gun
+from duckhunt.entities.duck import Duck
+from duckhunt.core import settings
 
 DOG_POSITION = None
 DOG_FRAME = None

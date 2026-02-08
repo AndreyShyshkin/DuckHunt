@@ -1,6 +1,6 @@
 import pygame
-from src.duckhunt.utils import sounds, registry
-from src.duckhunt.core import states, settings
+from duckhunt.utils import sounds, registry
+from duckhunt.core import states, settings
 
 
 class Driver(object):
