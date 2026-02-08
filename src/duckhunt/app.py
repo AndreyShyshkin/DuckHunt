@@ -7,17 +7,6 @@ from duckhunt.core import driver
 from duckhunt.core import states
 from duckhunt.entities import duck
 
-# Game parameters
-TITLE = "Duck Hunt"
-FRAMES_PER_SEC = 50
-BG_COLOR = 255, 255, 255
-
-# Initialize pygame before importing modules
-pygame.mixer.pre_init(44100, -16, 2, 1024)
-pygame.init()
-pygame.display.set_caption(TITLE)
-pygame.mouse.set_visible(False)
-
 class Game(object):
     def __init__(self, width, height):
         self.running = True
