@@ -1,5 +1,5 @@
 import pygame
-from .core import states, settings
+from src.duckhunt.core import states, settings
 
 
 class Gun(object):

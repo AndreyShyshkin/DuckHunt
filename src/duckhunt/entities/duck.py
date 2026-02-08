@@ -1,6 +1,6 @@
 import  random
-from .registry import adjpos, adjheight
-from .core import settings
+from src.duckhunt.registry import adjpos, adjheight
+from src.duckhunt.core import settings
 
 FRAME_SIZE = None
 XOFFSET, YOFFSET = None, None
