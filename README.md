@@ -15,11 +15,18 @@ cd DuckHunt
 
 Ми встановлюємо залежності та сам проєкт як локальний пакет:
 
-```Bash
-pip install -r requirements.txt
-pip install -e .
+#### Базове встановлення (для гри)
+```bash
+pip install -r requirements.txt && pip install -e .
 ```
-Важливо: Команда pip install -e . є обов'язковою, оскільки вона налаштовує імпорти з папки src.
+АБО
+
+#### Розширене встановлення (для розробки + тести)
+```bash
+pip install -r requirements.txt && pip install -e ".[dev]"
+```
+
+> Важливо: Команда pip install -e . є обов'язковою, оскільки вона налаштовує імпорти з папки src.
 
 ### 3. Запуск гри
 
