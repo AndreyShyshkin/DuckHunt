@@ -1,0 +1,3 @@
+dependencies = [
+    "pygame", "pytest", "pytest-html", "pytest-mock", "flake8", "flake8-html"
+]
