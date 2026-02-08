@@ -34,6 +34,7 @@ if __name__ == "__main__":
     duck.init()
 
     settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
+    settings.FRAMES_PER_SEC = args.fps
 
     speed_boost = (args.difficulty - 1) * 2
     settings.DUCK_SPEED_MIN += speed_boost
