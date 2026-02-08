@@ -18,7 +18,7 @@ class Game(object):
         self.driver = None
 
         self.accumulator = 0.0
-        self.logic_update_rate = 60.0
+        self.logic_update_rate = 50.0
         self.dt = 1.0 / self.logic_update_rate
 
     def init(self):
