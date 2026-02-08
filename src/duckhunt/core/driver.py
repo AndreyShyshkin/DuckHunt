@@ -1,5 +1,5 @@
 import pygame
-from src.duckhunt import registry, sounds
+from src.duckhunt.utils import sounds, registry
 from src.duckhunt.core import states, settings
 
 

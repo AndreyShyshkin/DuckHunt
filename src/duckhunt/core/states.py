@@ -1,6 +1,6 @@
 import time
 import pygame
-from src.duckhunt.registry import adjpos, adjrect, adjwidth, adjheight
+from src.duckhunt.utils.registry import adjpos, adjrect, adjwidth, adjheight
 from src.duckhunt.entities.gun import Gun
 from src.duckhunt.entities.duck import Duck
 from src.duckhunt.core import settings

@@ -2,7 +2,7 @@ import os, sys
 import pygame
 import pygame.transform
 import argparse
-from src.duckhunt.registry import init_screen_params
+from src.duckhunt.utils.registry import init_screen_params
 
 # Game parameters
 TITLE = "Duck Hunt"

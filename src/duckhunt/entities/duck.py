@@ -1,5 +1,5 @@
 import  random
-from src.duckhunt.registry import adjpos, adjheight
+from src.duckhunt.utils.registry import adjpos, adjheight
 from src.duckhunt.core import settings
 
 FRAME_SIZE = None
