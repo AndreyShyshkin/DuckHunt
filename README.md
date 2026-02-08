@@ -50,7 +50,6 @@ python run.py --width 1024 --height 768 --volume 0.5 --difficulty 2 --fps 120
 ```
 pytest
 ```
-Буде згенеровано HTML-звіт у папці reports/.
 
 ### Перевірка стилю коду (Linter)
 Ми використовуємо flake8 для перевірки відповідності PEP8.
