@@ -1,5 +1,6 @@
 pygame~=2.6.1
 pytest
 pytest-html
+pytest-mock
 flake8
 flake8-html
