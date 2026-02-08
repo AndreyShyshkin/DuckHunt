@@ -1,8 +1,11 @@
 import os, sys
 import pygame
 import pygame.transform
-import argparse
-from src.duckhunt.utils.registry import init_screen_params
+from duckhunt.utils.registry import init_screen_params
+from duckhunt.core import settings
+from duckhunt.core import driver
+from duckhunt.core import states
+from duckhunt.entities import duck
 
 # Game parameters
 TITLE = "Duck Hunt"
@@ -15,23 +18,21 @@ pygame.init()
 pygame.display.set_caption(TITLE)
 pygame.mouse.set_visible(False)
 
-import src.duckhunt.core.driver
-import src.duckhunt.entities.duck
-
 class Game(object):
     def __init__(self, width, height):
         self.running = True
         self.surface = None
         self.clock = pygame.time.Clock()
         self.size = width, height
-        background = os.path.join('../../assets/images', 'background.jpg')
-        bg = pygame.image.load(background)
-        self.background = pygame.transform.smoothscale (bg, self.size)
+
+        bg_path = os.path.join(settings.IMAGES_DIR, 'background.jpg')
+        bg = pygame.image.load(bg_path)
+        self.background = pygame.transform.smoothscale(bg, self.size)
         self.driver = None
 
     def init(self):
         self.surface = pygame.display.set_mode(self.size)
-        self.driver = src.game.driver.Driver(self.surface)
+        self.driver = driver.Driver(self.surface)
 
     def handleEvent(self, event):
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == 27):
@@ -62,31 +63,3 @@ class Game(object):
             self.render()
 
         self.cleanup()
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Duck Hunt Game")
-    parser.add_argument('--width', type=int, default=800, help='Screen width (default: 800)')
-    parser.add_argument('--height', type=int, default=500, help='Screen height (default: 500)')
-    parser.add_argument('--volume', type=float, default=1.0, help='Master volume (0.0 to 1.0, default: 1.0)')
-    parser.add_argument('--difficulty', type=int, default=1, help='Difficulty level (1: Normal, 2: Fast, 3: Hard, default: 1)')
-
-    args = parser.parse_args()
-
-    # Update global settings
-    init_screen_params(args.width, args.height)
-    # Recalculate coordinates based on new screen params
-    src.game.states.init()
-    src.game.duck.init()
-
-    src.game.settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
-
-    # Adjust difficulty (speed multiplier)
-    # Level 1: 4-6
-    # Level 2: 6-8
-    # Level 3: 8-10
-    speed_boost = (args.difficulty - 1) * 2
-    src.game.settings.DUCK_SPEED_MIN += speed_boost
-    src.game.settings.DUCK_SPEED_MAX += speed_boost
-
-    theGame = Game(args.width, args.height)
-    theGame.execute()
