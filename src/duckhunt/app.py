@@ -1,11 +1,8 @@
 import os, sys
 import pygame
 import pygame.transform
-from duckhunt.utils.registry import init_screen_params
 from duckhunt.core import settings
 from duckhunt.core import driver
-from duckhunt.core import states
-from duckhunt.entities import duck
 
 class Game(object):
     def __init__(self, width, height):
@@ -30,7 +27,7 @@ class Game(object):
             self.driver.handleEvent(event)
 
     def loop(self):
-        self.clock.tick(FRAMES_PER_SEC)
+        self.clock.tick(settings.FRAMES_PER_SEC)
         self.driver.update()
 
     def render(self):

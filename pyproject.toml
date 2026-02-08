@@ -5,13 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "duckhunt"
 version = "0.1.0"
-description = "Duck Hunt Game with CI/CD"
+description = "Duck Hunt Game"
 requires-python = ">=3.10"
 dependencies = [
     "pygame>=2.6.1",
     "pytest",
+    "pytest-html",
     "pytest-mock",
-    "flake8"
+    "flake8",
+    "flake8-html"
 ]
 
 [tool.setuptools.packages.find]

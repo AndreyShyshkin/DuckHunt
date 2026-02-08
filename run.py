@@ -24,6 +24,7 @@ if __name__ == "__main__":
     parser.add_argument('--height', type=int, default=500, help='Screen height')
     parser.add_argument('--volume', type=float, default=1.0, help='Master volume')
     parser.add_argument('--difficulty', type=int, default=1, help='Difficulty level')
+    parser.add_argument('--fps', type=int, default=60, help='Frames Per Second (default: 60)')
 
     args = parser.parse_args()
 
