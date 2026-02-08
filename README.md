@@ -20,7 +20,7 @@
 
 Приклад запуску з користувацькими налаштуваннями:
 ```bash
-python main.py --width 1024 --height 768 --volume 0.5 --difficulty 2
+python app.py --width 1024 --height 768 --volume 0.5 --difficulty 2
 ```
 ## Тестування та перевірка коду
 

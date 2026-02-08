@@ -24,7 +24,7 @@ class Game(object):
         self.surface = None
         self.clock = pygame.time.Clock()
         self.size = width, height
-        background = os.path.join('assets/images', 'background.jpg')
+        background = os.path.join('../../assets/images', 'background.jpg')
         bg = pygame.image.load(background)
         self.background = pygame.transform.smoothscale (bg, self.size)
         self.driver = None
