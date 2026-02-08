@@ -2,8 +2,7 @@ import os, sys
 import pygame
 import pygame.transform
 import argparse
-from game.registry import init_screen_params
-import game.settings
+from src.duckhunt.registry import init_screen_params
 
 # Game parameters
 TITLE = "Duck Hunt"
@@ -16,9 +15,8 @@ pygame.init()
 pygame.display.set_caption(TITLE)
 pygame.mouse.set_visible(False)
 
-import game.driver
-import game.states
-import game.duck
+import src.duckhunt.driver
+import src.duckhunt.duck
 
 class Game(object):
     def __init__(self, width, height):
@@ -33,7 +31,7 @@ class Game(object):
 
     def init(self):
         self.surface = pygame.display.set_mode(self.size)
-        self.driver = game.driver.Driver(self.surface)
+        self.driver = src.game.driver.Driver(self.surface)
 
     def handleEvent(self, event):
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == 27):
@@ -77,18 +75,18 @@ if __name__ == "__main__":
     # Update global settings
     init_screen_params(args.width, args.height)
     # Recalculate coordinates based on new screen params
-    game.states.init()
-    game.duck.init()
+    src.game.states.init()
+    src.game.duck.init()
 
-    game.settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
+    src.game.settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
 
     # Adjust difficulty (speed multiplier)
     # Level 1: 4-6
     # Level 2: 6-8
     # Level 3: 8-10
     speed_boost = (args.difficulty - 1) * 2
-    game.settings.DUCK_SPEED_MIN += speed_boost
-    game.settings.DUCK_SPEED_MAX += speed_boost
+    src.game.settings.DUCK_SPEED_MIN += speed_boost
+    src.game.settings.DUCK_SPEED_MAX += speed_boost
 
     theGame = Game(args.width, args.height)
     theGame.execute()

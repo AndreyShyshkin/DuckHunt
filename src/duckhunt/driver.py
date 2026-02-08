@@ -23,7 +23,7 @@ class Driver(object):
         self.registry.set('score', 0)
         self.registry.set('round', 1)
 
-        # Start the game
+        # Start the duckhunt
         self.state = states.StartState(self.registry)
         self.state = self.state.start()
 
