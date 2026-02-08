@@ -40,7 +40,7 @@ class Game(object):
         self.accumulator += frame_time
 
         while self.accumulator >= self.dt:
-            self.driver.update()
+            self.driver.update(self.dt)
             self.accumulator -= self.dt
 
     def render(self):
