@@ -1,6 +1,7 @@
-import os, sys
+import os
+import sys
 import pygame
-import pygame.transform
+
 from duckhunt.core import settings
 from duckhunt.core import driver
 
