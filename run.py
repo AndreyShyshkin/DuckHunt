@@ -33,7 +33,8 @@ if __name__ == "__main__":
     settings.GLOBAL_VOLUME = max(0.0, min(1.0, args.volume))
     settings.FRAMES_PER_SEC = args.fps
 
-    speed_boost = (args.difficulty - 1) * 2
+    difficulty = max(1, args.difficulty)
+    speed_boost = (difficulty - 1) * 2
     settings.DUCK_SPEED_MIN += speed_boost
     settings.DUCK_SPEED_MAX += speed_boost
 
