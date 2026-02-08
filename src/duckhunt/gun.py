@@ -1,5 +1,6 @@
 import pygame
-from . import settings, states
+from .core import states, settings
+
 
 class Gun(object):
     def __init__(self, registry):

@@ -1,5 +1,7 @@
 import pygame
-from . import registry, states, sounds, settings
+from src.duckhunt import registry, sounds
+from src.duckhunt.core import states, settings
+
 
 class Driver(object):
     def __init__(self, surface):

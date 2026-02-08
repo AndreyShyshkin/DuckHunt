@@ -1,6 +1,7 @@
 import os
 import pygame
-from . import settings
+from .core import settings
+
 
 def getSound(name, volume):
     soundPath = os.path.join(settings.AUDIO_DIR, name)

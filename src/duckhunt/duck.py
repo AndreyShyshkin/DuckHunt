@@ -1,6 +1,6 @@
 import  random
 from .registry import adjpos, adjheight
-from . import settings
+from .core import settings
 
 FRAME_SIZE = None
 XOFFSET, YOFFSET = None, None

@@ -15,7 +15,7 @@ pygame.init()
 pygame.display.set_caption(TITLE)
 pygame.mouse.set_visible(False)
 
-import src.duckhunt.driver
+import src.duckhunt.core.driver
 import src.duckhunt.duck
 
 class Game(object):
