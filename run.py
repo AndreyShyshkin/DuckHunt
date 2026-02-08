@@ -22,6 +22,7 @@ if __name__ == "__main__":
     parser.add_argument('--volume', type=float, default=1.0, help='Master volume')
     parser.add_argument('--difficulty', type=int, default=1, help='Difficulty level')
     parser.add_argument('--fps', type=int, default=60, help='Frames Per Second (default: 60)')
+    parser.add_argument("--fullscreen", action="store_true", help="Enable fullscreen mode")
 
     args = parser.parse_args()
 
@@ -38,5 +39,5 @@ if __name__ == "__main__":
     settings.DUCK_SPEED_MIN += speed_boost
     settings.DUCK_SPEED_MAX += speed_boost
 
-    theGame = Game(args.width, args.height)
+    theGame = Game(args.width, args.height, fullscreen=args.fullscreen)
     theGame.execute()

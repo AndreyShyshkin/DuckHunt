@@ -6,11 +6,12 @@ from duckhunt.core import settings
 from duckhunt.core import driver
 
 class Game(object):
-    def __init__(self, width, height):
+    def __init__(self, width, height, fullscreen=False):
         self.running = True
         self.surface = None
         self.clock = pygame.time.Clock()
         self.size = width, height
+        self.fullscreen = fullscreen
 
         bg_path = os.path.join(settings.IMAGES_DIR, 'background.jpg')
         bg = pygame.image.load(bg_path)
@@ -22,7 +23,8 @@ class Game(object):
         self.dt = 1.0 / self.logic_update_rate
 
     def init(self):
-        self.surface = pygame.display.set_mode(self.size)
+        flags = pygame.FULLSCREEN if self.fullscreen else 0
+        self.surface = pygame.display.set_mode(self.size, flags)
         self.driver = driver.Driver(self.surface)
 
     def handleEvent(self, event):
