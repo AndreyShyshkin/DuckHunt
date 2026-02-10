@@ -5,7 +5,8 @@ ORIG_W = 800
 ORIG_H = 500
 
 # Paths
-ASSETS_DIR = 'assets'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+ASSETS_DIR = os.path.join(BASE_DIR, 'assets')
 IMAGES_DIR = os.path.join(ASSETS_DIR, 'images')
 AUDIO_DIR = os.path.join(ASSETS_DIR, 'audio')
 FONTS_DIR = os.path.join(ASSETS_DIR, 'fonts')
@@ -42,6 +43,7 @@ COLOR_WHITE = (255, 255, 255)
 # Game Settings
 GUN_ROUNDS = 3
 DUCK_ANIMATION_DELAY = 8
+FRAMES_PER_SEC = 60
 
 # Object Properties (Raw values)
 DUCK_FRAME_W = 81
