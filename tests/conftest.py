@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 @pytest.fixture
 def mock_registry():
     """
-    Створює фейковий registry, доступний для всіх тестів автоматично.pip install pytest
+    Створює фейковий registry, доступний для всіх тестів.
     Імітує екран, звуки та спрайти, щоб не залежати від pygame.
     """
     registry = MagicMock()
