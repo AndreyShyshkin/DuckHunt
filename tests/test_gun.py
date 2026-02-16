@@ -12,6 +12,7 @@ class TestGun:
         """Перевірити, що постріл зменшує кількість патронів."""
         # Патчимо pygame всередині модуля gun
         with patch('duckhunt.entities.gun.pygame') as mock_pygame:
+
             # Налаштовуємо мок для картинки прицілу
             mock_img = MagicMock()
             mock_img.get_size.return_value = (50, 50)
@@ -29,6 +30,7 @@ class TestGun:
 
     def test_gun_no_ammo(self, mock_registry):
         """Перевірити, що не можна стріляти без патронів."""
+
         with patch('duckhunt.entities.gun.pygame') as mock_pygame:
             mock_img = MagicMock()
             mock_img.get_size.return_value = (50, 50)
@@ -45,6 +47,7 @@ class TestGun:
 
     def test_gun_reload(self, mock_registry):
         """Перевірити, що перезарядка відновлює патрони."""
+        
         with patch('duckhunt.entities.gun.pygame') as mock_pygame:
             mock_img = MagicMock()
             mock_img.get_size.return_value = (50, 50)

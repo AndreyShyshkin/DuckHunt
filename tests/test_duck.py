@@ -10,6 +10,7 @@ class TestDuck:
     def test_duck_movement(self, mock_registry):
         """Перевірити, що качка змінює координати при оновленні."""
         # Важливо: ініціалізуємо глобальні змінні модуля (FRAME_SIZE і т.д.)
+        
         duck_module.init() 
 
         duck = duck_module.Duck(mock_registry)
