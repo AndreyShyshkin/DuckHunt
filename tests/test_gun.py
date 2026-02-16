@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from DuckHunt.src.duckhunt.entities.gun import Gun
-from DuckHunt.src.duckhunt.core.settings import settings
+from duckhunt.entities.gun import Gun
+from duckhunt.core import settings
 
 # Маркуємо всі тести в цьому файлі як 'mechanics'
 pytestmark = pytest.mark.mechanics
