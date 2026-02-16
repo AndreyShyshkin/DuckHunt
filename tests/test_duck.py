@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-import duckhunt.entities.duck as duck_module
+import DuckHunt.src.duckhunt.entities.duck as duck_module
 
 # Маркуємо всі тести в цьому файлі як 'mechanics'
 pytestmark = pytest.mark.mechanics
@@ -52,4 +52,4 @@ class TestDuck:
         miss_pos = (500, 500) 
         
         assert duck.isShot(miss_pos) is False
-        assert duck.isDead is False  # Качка має жити
+        assert duck.isDead is False  # Качка має жит
