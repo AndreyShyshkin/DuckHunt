@@ -53,4 +53,4 @@ class TestDuck:
         miss_pos = (500, 500) 
         
         assert duck.isShot(miss_pos) is False
-        assert duck.isDead is False  # Качка має жит
+        assert duck.isDead is False  # Качка має жити
