@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-import DuckHunt.src.duckhunt.entities.duck as duck_module
+import duckhunt.entities.duck as duck_module
 
 # Маркуємо всі тести в цьому файлі як 'mechanics'
 pytestmark = pytest.mark.mechanics
