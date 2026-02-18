@@ -22,3 +22,13 @@ def test_round_end_game_over(mock_env):
 
     assert state.isGameOver is True
     mock_sound.enqueue.assert_called_once_with('gameover')
+
+def test_round_end_next_round(mock_env):
+    """Перевіряє логіку переходу до наступного раунду (< 4 промахів)."""
+    _, mock_sound = mock_env
+    hit_ducks = [True] * 10  # 10 влучань, 0 промахів
+
+    state = RoundEndState(hit_ducks)
+
+    assert state.isGameOver is False
+    mock_sound.enqueue.assert_called_once_with('nextround')
