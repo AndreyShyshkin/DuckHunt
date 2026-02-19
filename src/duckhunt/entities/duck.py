@@ -1,3 +1,8 @@
+"""
+Модуль, що описує поведінку качки в грі.
+Містить логіку руху, анімації, відскоку від стін та реакції на влучання.
+"""
+
 import random
 from duckhunt.utils.registry import adjpos, adjheight
 from duckhunt.core import settings
@@ -8,6 +13,8 @@ FLYOFF_YOFFSET = None
 FALL_YOFFSET = None
 
 def init():
+    """Ініціалізує глобальні константи розмірів та зсувів для спрайтів качки відповідно до розміру екрану."""
+
     global FRAME_SIZE, XOFFSET, YOFFSET, FLYOFF_YOFFSET, FALL_YOFFSET
     FRAME_SIZE = adjpos(settings.DUCK_FRAME_W, settings.DUCK_FRAME_H)
     XOFFSET, YOFFSET = adjpos(settings.DUCK_X_OFFSET, settings.DUCK_Y_OFFSET)
@@ -15,8 +22,14 @@ def init():
     FALL_YOFFSET = YOFFSET + adjheight(settings.DUCK_FALL_Y_OFFSET)
 
 class Duck(object):
+    """
+    Клас, що представляє ігрову сутність качки.
+    Керує її координатами, станом (жива/мертва/відлітає) та анімацією.
+    """
 
     def __init__(self, registry):
+        """Ініціалізує качку, задає початкові випадкові координати та параметри анімації."""
+
         self.registry = registry
         self.imageReversed = False
         self.isDead = False
@@ -42,6 +55,8 @@ class Duck(object):
         self.changeDirection()
 
     def update(self, dt):
+        """Оновлює стан качки (координати, таймери анімації, перевірка вильоту за екран) кожен кадр."""
+
         surface = self.registry.get('surface')
 
         self.frame = (self.frame + 1) % self.animationDelay
@@ -78,6 +93,8 @@ class Duck(object):
             self.isFinished = True
 
     def render(self):
+        """Відмальовує спрайт качки на екрані залежно від її поточного стану (політ або падіння)."""
+
         surface = self.registry.get('surface')
         width, height = FRAME_SIZE
         x, y = self.position
@@ -111,6 +128,11 @@ class Duck(object):
                 pass
 
     def isShot(self, pos):
+        """
+        Перевіряє, чи потрапив постріл у площу (hitbox) качки.
+        Повертає True, якщо влучання успішне, і змінює стан качки на 'мертва'.
+        """
+
         x1, y1 = self.position
         x2, y2 = pos
         frameX, frameY = FRAME_SIZE
@@ -134,6 +156,8 @@ class Duck(object):
 
     # Helper method to avoid code duplication
     def _get_random_velocity(self, speed_range, x_dir_mult, min_y, max_y):
+        """Допоміжний метод для генерації випадкового вектора швидкості (dx, dy), уникаючи нульових значень."""
+
         while True:
             dx = random.choice(speed_range) * x_dir_mult
             dy = random.randint(min_y, max_y)
@@ -142,6 +166,8 @@ class Duck(object):
                 return dx, dy
 
     def changeDirection(self):
+        """Змінює напрямок руху качки та її швидкість при зіткненні з краями екрану."""
+        
         surface = self.registry.get('surface')
         round = self.registry.get('round')
         frameWidth, frameHeight = FRAME_SIZE
