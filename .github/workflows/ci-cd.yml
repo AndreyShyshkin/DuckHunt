@@ -29,6 +29,7 @@ jobs:
           flake8 . --format=html --htmldir=reports/flake8
 
       - name: Test with Pytest
+        if: always()
         run: |
           mkdir -p reports/pytest
           pytest --html=reports/pytest/report.html --self-contained-html
