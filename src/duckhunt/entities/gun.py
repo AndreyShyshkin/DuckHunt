@@ -19,7 +19,7 @@ class Gun(object):
 
         self.registry = registry
         self.rounds = settings.GUN_ROUNDS
-        self.mousePos = (0,0)
+        self.mousePos = (0, 0)
         self.mouseImg = pygame.image.load(settings.CROSSHAIRS_IMG)
         self.mouseImg = pygame.transform.scale(self.mouseImg, adjpos(*self.mouseImg.get_size()))
 

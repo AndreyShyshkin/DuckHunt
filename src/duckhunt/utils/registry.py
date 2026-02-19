@@ -7,6 +7,7 @@ from duckhunt.core.settings import ORIG_W, ORIG_H
 
 RENDER_W, RENDER_H = ORIG_W, ORIG_H
 
+
 def init_screen_params(width, height):
     """Ініціалізує глобальні параметри ширини та висоти екрану для подальшого масштабування."""
 
@@ -14,25 +15,30 @@ def init_screen_params(width, height):
     RENDER_W = width
     RENDER_H = height
 
-def adjwidth (x):
+
+def adjwidth(x):
     """Масштабує координату X або ширину відносно оригінального розміру екрану."""
 
     return (RENDER_W * x) // ORIG_W
 
-def adjheight (y):
+
+def adjheight(y):
     """Масштабує координату Y або висоту відносно оригінального розміру екрану."""
 
     return (RENDER_H * y) // ORIG_H
 
-def adjpos (x, y):
+
+def adjpos(x, y):
     """Масштабує координати (X, Y) у вигляді кортежу."""
 
-    return (adjwidth (x), adjheight (y))
+    return (adjwidth(x), adjheight(y))
 
-def adjrect (a, b, c, d):
+
+def adjrect(a, b, c, d):
     """Масштабує прямокутник (x, y, width, height) у вигляді кортежу."""
 
-    return (adjwidth (a), adjheight (b), adjwidth (c), adjheight (d))
+    return (adjwidth(a), adjheight(b), adjwidth(c), adjheight(d))
+
 
 class Registry(object):
     """

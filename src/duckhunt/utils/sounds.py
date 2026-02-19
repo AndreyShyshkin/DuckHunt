@@ -18,6 +18,7 @@ def getSound(name, volume):
     sound.set_volume(volume * settings.GLOBAL_VOLUME)
     return sound
 
+
 class SoundHandler:
     """
     Клас для управління відтворенням звуків.
@@ -30,15 +31,15 @@ class SoundHandler:
         self.mute = False
         self.queue = set()
         self.sounds = {
-            'bark':      getSound("bark.ogg", settings.VOL_BARK),
-            'blast':     getSound("blast.ogg", settings.VOL_BLAST),
-            'drop':      getSound("drop.ogg", settings.VOL_DROP),
-            'flyaway':   getSound("flyaway.ogg", settings.VOL_FLYAWAY),
-            'gameover':  getSound("gameover.ogg", settings.VOL_GAMEOVER),
-            'hit':       getSound("hit.ogg", settings.VOL_HIT),
+            'bark': getSound("bark.ogg", settings.VOL_BARK),
+            'blast': getSound("blast.ogg", settings.VOL_BLAST),
+            'drop': getSound("drop.ogg", settings.VOL_DROP),
+            'flyaway': getSound("flyaway.ogg", settings.VOL_FLYAWAY),
+            'gameover': getSound("gameover.ogg", settings.VOL_GAMEOVER),
+            'hit': getSound("hit.ogg", settings.VOL_HIT),
             'nextround': getSound("next-round.ogg", settings.VOL_NEXTROUND),
-            'point':     getSound("point.ogg", settings.VOL_POINT),
-            'quack':     getSound("quack.ogg", settings.VOL_QUACK)
+            'point': getSound("point.ogg", settings.VOL_POINT),
+            'quack': getSound("quack.ogg", settings.VOL_QUACK)
         }
 
     def enqueue(self, sound):

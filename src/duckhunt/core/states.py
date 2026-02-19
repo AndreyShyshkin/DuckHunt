@@ -40,6 +40,7 @@ NOTICE_WIDTH = None
 NOTICE_LINE_1_HEIGHT = None
 NOTICE_LINE_2_HEIGHT = None
 
+
 def init():
     """
     Ініціалізує та масштабує глобальні координати і розміри об'єктів (собака, інтерфейс)
@@ -109,7 +110,9 @@ def init():
     notice_y = adjheight(settings.NOTICE_POS[1])
     NOTICE_POSITION = (notice_x, notice_y)
 
+
 registry = None
+
 
 class BaseState(object):
     """
@@ -182,6 +185,7 @@ class BaseState(object):
         x -= text.get_width()
         surface.blit(text, (x, y))
 
+
 class StartState(BaseState):
     """
     Початковий стан гри. Відповідає за ініціалізацію реєстру перед стартом першого раунду.
@@ -196,6 +200,7 @@ class StartState(BaseState):
         """Запускає гру, перемикаючи стан на початок раунду."""
 
         return RoundStartState()
+
 
 class RoundStartState(BaseState):
     """
@@ -271,6 +276,7 @@ class RoundStartState(BaseState):
             rect = ((width * rectAnimationIdx), 0, width, height)
 
         surface.blit(sprites, self.dogPosition, rect)
+
 
 class PlayState(BaseState):
     """
@@ -397,11 +403,13 @@ class PlayState(BaseState):
 
         self.gun.render()
 
+
 class RoundEndState(BaseState):
     """
     Стан підведення підсумків раунду.
     Перевіряє кількість влучних пострілів і вирішує: перехід на наступний раунд чи Game Over.
     """
+
     def __init__(self, hitDucks):
         super(RoundEndState, self).__init__()
         self.isGameOver = False
@@ -440,6 +448,7 @@ class RoundEndState(BaseState):
 
         self.renderNotices()
         self.renderControls()
+
 
 class GameOverState(BaseState):
     """Стан завершення гри. Очікує дій гравця для перезапуску."""
