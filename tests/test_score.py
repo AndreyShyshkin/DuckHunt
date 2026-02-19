@@ -1,3 +1,8 @@
+"""
+Тести логіки нарахування балів та керування станом раунду.
+Демонструє використання фікстур та параметризації у pytest.
+"""
+
 import pytest
 from duckhunt.utils.registry import Registry  
 

@@ -1,3 +1,8 @@
+"""
+Тести для машини станів (State Machine) гри.
+Перевіряє логіку переходу між станами (зокрема, умови перемоги та поразки).
+"""
+
 import pytest
 from unittest.mock import MagicMock
 from duckhunt.core import states
