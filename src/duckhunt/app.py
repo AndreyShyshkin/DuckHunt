@@ -47,7 +47,10 @@ class Game(object):
             os.environ['SDL_VIDEO_CENTERED'] = '1'
 
         flags = pygame.FULLSCREEN if self.fullscreen else 0
-        self.surface = pygame.display.set_mode(self.size, flags)
+        if self.fullscreen:
+            self.surface = pygame.display.set_mode((0, 0), flags)
+        else:
+            self.surface = pygame.display.set_mode(self.size, flags)
 
         self.window_size = self.surface.get_size()
 
