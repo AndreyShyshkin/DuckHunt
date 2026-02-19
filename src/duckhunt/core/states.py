@@ -121,7 +121,6 @@ class BaseState(object):
     """
 
     def __init__(self):
-        global registry
         self.registry = registry
         self.timer = int(time.time())
         self.notices = set()
