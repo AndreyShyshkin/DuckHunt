@@ -17,7 +17,7 @@ if __name__ == "__main__":
     TITLE = "Duck Hunt"
 
     # Init pygame params
-    pygame.mixer.pre_init(44100, -16, 2, 1024)
+    pygame.mixer.pre_init(44100, -16, 2, 4096)
     pygame.init()
     pygame.display.set_caption(TITLE)
     pygame.mouse.set_visible(False)
