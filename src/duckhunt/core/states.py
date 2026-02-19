@@ -305,12 +305,11 @@ class PlayState(BaseState):
                 elif not duck.isDead and self.gun.rounds <= 0:
                     duck.flyOff = True
 
-    def update(self, dt):
+    def update(self, dt):  # noqa: C901
         """
         Оновлює позиції качок, перевіряє закінчення часу раунду
         та керує анімацією собаки, яка підбирає збитих качок або сміється.
         """
-
         timer = int(time.time())
 
         if self.dogCanComeOut:
