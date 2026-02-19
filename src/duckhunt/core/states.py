@@ -289,6 +289,7 @@ class PlayState(BaseState):
         self.dogCanComeOut = False
         self.dogPosition = DOG_REPORT_POSITION
         self.dogRectToDraw = None
+        self.soundPlayed = False
 
     def execute(self, event):
         """Обробляє рух миші (приціл) та кліки (постріли по качках)."""
@@ -305,7 +306,85 @@ class PlayState(BaseState):
                 elif not duck.isDead and self.gun.rounds <= 0:
                     duck.flyOff = True
 
-    def update(self, dt):  # noqa: C901
+    def _count_ducks_shot(self):
+        """Підраховує кількість збитих качок."""
+        return sum(1 for duck in self.ducks if duck.isDead)
+
+    def _get_dog_rect_and_play_sound(self, ducks_shot):
+        """Визначає спрайт собаки та відтворює звук залежно від кількості збитих качок."""
+        if not self.soundPlayed:
+            if ducks_shot == 1:
+                self.registry.get('soundHandler').enqueue('hit')
+            elif ducks_shot == 2:
+                self.registry.get('soundHandler').enqueue('hit')
+            else:
+                self.registry.get('soundHandler').enqueue('flyaway')
+            self.soundPlayed = True
+
+        if ducks_shot == 1:
+            return DOG_ONE_DUCK_RECT
+        elif ducks_shot == 2:
+            return DOG_TWO_DUCKS_RECT
+        else:
+            return DOG_LAUGH_RECT
+
+    def _update_dog_position(self, rect_source, timer):
+        """Оновлює позицію собаки під час анімації виходу."""
+        x1, y1 = self.dogPosition
+        x_src, y_src, w_src, h_max = rect_source
+        current_visible_height = h_max
+
+        if self.frame < h_max:
+            self.dogPosition = x1, (y1 - 3)
+            current_visible_height = self.frame
+        else:
+            self.dogPosition = x1, (y1 + 3)
+            current_visible_height -= (self.frame - h_max)
+
+        if current_visible_height <= 0:
+            self._reset_round(timer)
+        else:
+            self.dogRectToDraw = (x_src, y_src, w_src, current_visible_height)
+
+    def _reset_round(self, timer):
+        """Скидає раунд після завершення анімації собаки."""
+        self.dogPosition = DOG_REPORT_POSITION
+        self.frame = 0
+        self.dogCanComeOut = False
+        self.ducks = [Duck(self.registry), Duck(self.registry)]
+        self.timer = timer
+        self.gun.reloadIt()
+        self.dogRectToDraw = None
+        self.soundPlayed = False
+
+    def _handle_dog_animation(self, timer):
+        """Обробляє анімацію виходу собаки."""
+        self.frame += 3
+        ducks_shot = self._count_ducks_shot()
+        rect_source = self._get_dog_rect_and_play_sound(ducks_shot)
+        self._update_dog_position(rect_source, timer)
+
+    def _check_round_end_conditions(self, timer):
+        """Перевіряє умови завершення раунду."""
+        times_up = (timer - self.timer) > self.roundTime
+        all_ducks_finished = self.ducks[0].isFinished and self.ducks[1].isFinished
+        return times_up or all_ducks_finished
+
+    def _handle_flyaway_ducks(self):
+        """Запускає втечу качок, які залишились живими."""
+        for duck in self.ducks:
+            if not duck.isFinished and not duck.isDead:
+                duck.flyOff = True
+                return True
+        return False
+
+    def _update_hit_ducks_count(self):
+        """Оновлює лічильник збитих качок."""
+        for duck in self.ducks:
+            if not duck.isDead:
+                self.hitDuckIndex += 1
+
+    def update(self, dt):
         """
         Оновлює позиції качок, перевіряє закінчення часу раунду
         та керує анімацією собаки, яка підбирає збитих качок або сміється.
@@ -313,74 +392,25 @@ class PlayState(BaseState):
         timer = int(time.time())
 
         if self.dogCanComeOut:
-            self.frame += 3
-            ducksShot = 0
-            for duck in self.ducks:
-                if duck.isDead:
-                    ducksShot += 1
-
-            rectSource = None
-            if ducksShot == 1:
-                rectSource = DOG_ONE_DUCK_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('hit')
-            elif ducksShot == 2:
-                rectSource = DOG_TWO_DUCKS_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('hit')
-            else:
-                rectSource = DOG_LAUGH_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('flyaway')
-
-            x1, y1 = self.dogPosition
-            x_src, y_src, w_src, h_max = rectSource
-
-            current_visible_height = h_max
-
-            if self.frame < h_max:
-                self.dogPosition = x1, (y1 - 3)
-                current_visible_height = self.frame
-            else:
-                self.dogPosition = x1, (y1 + 3)
-                current_visible_height -= (self.frame - h_max)
-
-            if current_visible_height <= 0:
-                self.dogPosition = DOG_REPORT_POSITION
-                self.frame = 0
-                self.dogCanComeOut = False
-                self.ducks = [Duck(self.registry), Duck(self.registry)]
-                self.timer = timer
-                self.gun.reloadIt()
-                self.dogRectToDraw = None
-            else:
-                self.dogRectToDraw = (x_src, y_src, w_src, current_visible_height)
-
+            self._handle_dog_animation(timer)
             return
 
         for duck in self.ducks:
             duck.update(dt)
 
-        timesUp = (timer - self.timer) > self.roundTime
-        if not (timesUp or (self.ducks[0].isFinished and self.ducks[1].isFinished)):
+        if not self._check_round_end_conditions(timer):
             return None
 
-        for duck in self.ducks:
-            if not duck.isFinished and not duck.isDead:
-                duck.flyOff = True
-                return None
+        if self._handle_flyaway_ducks():
+            return None
 
-        for duck in self.ducks:
-            if not duck.isDead and not duck.isFinished:
-                pass
-
-        for duck in self.ducks:
-            if not duck.isDead:
-                self.hitDuckIndex += 1
+        self._update_hit_ducks_count()
 
         if self.hitDuckIndex >= 9:
             return RoundEndState(self.hitDucks)
 
+        if not self.dogCanComeOut:
+            self.soundPlayed = False
         self.dogCanComeOut = True
 
     def render(self):

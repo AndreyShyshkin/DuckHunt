@@ -45,6 +45,7 @@ class Duck(object):
         self.frame = 0
         self.animationFrame = 0
         self.justShot = False
+        self.dropSoundPlayed = False
 
         self.dx = 0
         self.dy = 0
@@ -83,7 +84,9 @@ class Duck(object):
                 self.position = (x + self.dx), (y + self.dy)
             else:
                 self.isFinished = True
-                self.registry.get('soundHandler').enqueue('drop')
+                if not self.dropSoundPlayed:
+                    self.registry.get('soundHandler').enqueue('drop')
+                    self.dropSoundPlayed = True
 
         frameWidth, frameHeight = FRAME_SIZE
         x, y = self.position
