@@ -1,3 +1,9 @@
+"""
+Головний модуль застосунку.
+Містить клас Game, який відповідає за ініціалізацію вікна Pygame, масштабування екрану 
+та виконання головного ігрового циклу (Game Loop).
+"""
+
 import os
 import sys
 import pygame
@@ -6,7 +12,13 @@ from duckhunt.core import settings
 from duckhunt.core import driver
 
 class Game(object):
+    """
+    Головний клас гри, що інкапсулює логіку вікна, поверхні відмальовки та таймери.
+    """
+
     def __init__(self, width, height, fullscreen=False):
+        """Ініціалізує базові параметри вікна, завантажує фон та налаштовує таймер (FPS)."""
+
         self.running = True
         self.surface = None
         self.game_surface = None
@@ -28,6 +40,8 @@ class Game(object):
         self.dt = 1.0 / self.logic_update_rate
 
     def init(self):
+        """Налаштовує вікно Pygame, створює ігрові поверхні та ініціалізує драйвер станів гри."""
+
         if not self.fullscreen:
             os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -45,6 +59,8 @@ class Game(object):
         self._recompute_scale()
 
     def _recompute_scale(self):
+        """Перераховує коефіцієнт масштабування та позицію для збереження пропорцій вікна при зміні його розміру."""
+
         window_w, window_h = self.window_size
         game_w, game_h = self.size
         scale = min(window_w / game_w, window_h / game_h)
@@ -57,6 +73,8 @@ class Game(object):
         self.scaled_size = (scaled_w, scaled_h)
 
     def handleEvent(self, event):
+        """Обробляє системні події (закриття вікна, зміна розміру) та передає ігрові події до драйвера."""
+        
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             self.running = False
         else:
@@ -66,6 +84,8 @@ class Game(object):
                 self._recompute_scale()
 
     def loop(self):
+        """Оновлює логіку гри з фіксованим кроком часу (Fixed Time Step) для плавності на різних ПК."""
+
         frame_time = self.clock.tick(settings.FRAMES_PER_SEC) / 1000.0
 
         if frame_time > 0.25:
@@ -78,6 +98,8 @@ class Game(object):
             self.accumulator -= self.dt
 
     def render(self):
+        """Відмальовує фон, ігрові об'єкти драйвера та масштабує фінальне зображення під розмір вікна."""
+
         self.game_surface.blit(self.background, (0, 0))
         self.driver.render()
 
@@ -91,10 +113,14 @@ class Game(object):
         pygame.display.flip()
 
     def cleanup(self):
+        """Коректно завершує роботу бібліотеки Pygame та закриває програму."""
+
         pygame.quit()
         sys.exit(0)
 
     def execute(self):
+        """Запускає головний ігровий цикл (обробка подій, оновлення логіки, рендеринг)."""
+        
         self.init()
 
         while (self.running):
