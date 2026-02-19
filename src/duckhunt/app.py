@@ -35,6 +35,7 @@ class Game(object):
         self.window_size = self.size
         self.scale = 1.0
         self.scale_pos = (0, 0)
+        self.scaled_size = self.size
 
         self.accumulator = 0.0
         self.logic_update_rate = 50.0
@@ -77,11 +78,11 @@ class Game(object):
         """Обробляє системні події (закриття вікна, зміна розміру) та передає ігрові події до драйвера."""
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             self.running = False
+        elif event.type == pygame.VIDEORESIZE:
+            self.window_size = event.size
+            self._recompute_scale()
         else:
             self.driver.handleEvent(event)
-            if event.type == pygame.VIDEORESIZE:
-                self.window_size = event.size
-                self._recompute_scale()
 
     def loop(self):
         """Оновлює логіку гри з фіксованим кроком часу (Fixed Time Step) для плавності на різних ПК."""
@@ -103,7 +104,10 @@ class Game(object):
         self.game_surface.blit(self.background, (0, 0))
         self.driver.render()
 
-        if self.scaled_size != self.size:
+        if (hasattr(self, 'scaled_size')
+                and self.scaled_size != self.size
+                and self.scaled_size[0] > 0
+                and self.scaled_size[1] > 0):
             scaled = pygame.transform.smoothscale(self.game_surface, self.scaled_size)
         else:
             scaled = self.game_surface
