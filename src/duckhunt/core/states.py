@@ -1,3 +1,9 @@
+"""
+Модуль керування станами гри (State Machine).
+Містить класи, що відповідають за різні етапи гри: початок, раунд, ігровий процес та завершення.
+"""
+
+
 import time
 import pygame
 from duckhunt.utils.registry import adjpos, adjrect, adjwidth, adjheight
@@ -34,7 +40,12 @@ NOTICE_WIDTH = None
 NOTICE_LINE_1_HEIGHT = None
 NOTICE_LINE_2_HEIGHT = None
 
+
 def init():
+    """
+    Ініціалізує та масштабує глобальні координати і розміри об'єктів (собака, інтерфейс)
+    під поточний розмір екрану.
+    """
     global DOG_POSITION, DOG_FRAME, DOG_REPORT_POSITION, DOG_LAUGH_RECT, DOG_ONE_DUCK_RECT, DOG_TWO_DUCKS_RECT
     global HIT_POSITION, HIT_RECT, HIT_DUCK_POSITION, HIT_DUCK_WHITE_RECT, HIT_DUCK_RED_RECT
     global SCORE_POSITION, SCORE_RECT, FONT_STARTING_POSITION, ROUND_POSITION
@@ -99,11 +110,17 @@ def init():
     notice_y = adjheight(settings.NOTICE_POS[1])
     NOTICE_POSITION = (notice_x, notice_y)
 
+
 registry = None
 
+
 class BaseState(object):
+    """
+    Базовий клас для всіх станів гри.
+    Забезпечує загальний функціонал: відмальовування інтерфейсу (патрони, рахунок, качки) та повідомлень.
+    """
+
     def __init__(self):
-        global registry
         self.registry = registry
         self.timer = int(time.time())
         self.notices = set()
@@ -112,6 +129,8 @@ class BaseState(object):
         self.hitDuckIndex = 0
 
     def renderNotices(self):
+        """Відмальовує текстові повідомлення на екрані (наприклад, номер раунду або Game Over)."""
+
         if len(self.notices) == 0:
             return
         elif len(self.notices) == 1:
@@ -130,6 +149,8 @@ class BaseState(object):
         surface.blit(line2, (x2, NOTICE_LINE_2_HEIGHT))
 
     def renderControls(self):
+        """Відмальовує панель управління: рахунок, залишок патронів та статус влучань."""
+
         img = self.registry.get('controlImgs')
         surface = self.registry.get('surface')
         round = self.registry.get('round')
@@ -163,16 +184,28 @@ class BaseState(object):
         x -= text.get_width()
         surface.blit(text, (x, y))
 
+
 class StartState(BaseState):
+    """
+    Початковий стан гри. Відповідає за ініціалізацію реєстру перед стартом першого раунду.
+    """
+
     def __init__(self, reg):
         super(StartState, self).__init__()
         global registry
         registry = reg
 
     def start(self):
+        """Запускає гру, перемикаючи стан на початок раунду."""
+
         return RoundStartState()
 
+
 class RoundStartState(BaseState):
+    """
+    Стан початку раунду. Відповідає за анімацію появи собаки, яка нюхає землю і стрибає в траву.
+    """
+
     def __init__(self):
         super(RoundStartState, self).__init__()
         self.frame = 1
@@ -182,9 +215,11 @@ class RoundStartState(BaseState):
         self.barkCount = 0
 
     def execute(self, event):
-        pass
+        """Обробляє події (не використовується під час стартової анімації)."""
 
     def update(self, dt):
+        """Оновлює кадри анімації собаки та перемикає гру в стан PlayState після завершення анімації."""
+
         timer = int(time.time())
 
         if (timer - self.timer) > 2:
@@ -217,6 +252,8 @@ class RoundStartState(BaseState):
                 self.dogPosition = (x + adjwidth(5)), (y + adjheight(5))
 
     def render(self):
+        """Відмальовує собаку під час стартової анімації та інтерфейс."""
+
         surface = self.registry.get('surface')
         sprites = self.registry.get('sprites')
         width, height = DOG_FRAME
@@ -237,7 +274,13 @@ class RoundStartState(BaseState):
 
         surface.blit(sprites, self.dogPosition, rect)
 
+
 class PlayState(BaseState):
+    """
+    Основний стан ігрового процесу (Gameplay).
+    Відповідає за генерацію качок, обробку пострілів гравця та вихід собаки з трофеями.
+    """
+
     def __init__(self):
         super(PlayState, self).__init__()
         self.ducks = [Duck(self.registry), Duck(self.registry)]
@@ -246,8 +289,11 @@ class PlayState(BaseState):
         self.dogCanComeOut = False
         self.dogPosition = DOG_REPORT_POSITION
         self.dogRectToDraw = None
+        self.soundPlayed = False
 
     def execute(self, event):
+        """Обробляє рух миші (приціл) та кліки (постріли по качках)."""
+
         if event.type == pygame.MOUSEMOTION:
             self.gun.moveCrossHairs(event.pos)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -260,81 +306,117 @@ class PlayState(BaseState):
                 elif not duck.isDead and self.gun.rounds <= 0:
                     duck.flyOff = True
 
+    def _count_ducks_shot(self):
+        """Підраховує кількість збитих качок."""
+        return sum(1 for duck in self.ducks if duck.isDead)
+
+    def _get_dog_rect_and_play_sound(self, ducks_shot):
+        """Визначає спрайт собаки та відтворює звук залежно від кількості збитих качок."""
+        if not self.soundPlayed:
+            if ducks_shot == 1:
+                self.registry.get('soundHandler').enqueue('hit')
+            elif ducks_shot == 2:
+                self.registry.get('soundHandler').enqueue('hit')
+            else:
+                self.registry.get('soundHandler').enqueue('flyaway')
+            self.soundPlayed = True
+
+        if ducks_shot == 1:
+            return DOG_ONE_DUCK_RECT
+        elif ducks_shot == 2:
+            return DOG_TWO_DUCKS_RECT
+        else:
+            return DOG_LAUGH_RECT
+
+    def _update_dog_position(self, rect_source, timer):
+        """Оновлює позицію собаки під час анімації виходу."""
+        x1, y1 = self.dogPosition
+        x_src, y_src, w_src, h_max = rect_source
+        current_visible_height = h_max
+
+        if self.frame < h_max:
+            self.dogPosition = x1, (y1 - 3)
+            current_visible_height = min(self.frame, h_max)
+        else:
+            self.dogPosition = x1, (y1 + 3)
+            current_visible_height = h_max - (self.frame - h_max)
+
+        if current_visible_height <= 0:
+            self._reset_round(timer)
+        else:
+            current_visible_height = max(1, min(current_visible_height, h_max))
+            self.dogRectToDraw = (x_src, y_src, w_src, current_visible_height)
+
+    def _reset_round(self, timer):
+        """Скидає раунд після завершення анімації собаки."""
+        self.dogPosition = DOG_REPORT_POSITION
+        self.frame = 0
+        self.dogCanComeOut = False
+        self.ducks = [Duck(self.registry), Duck(self.registry)]
+        self.timer = timer
+        self.gun.reloadIt()
+        self.dogRectToDraw = None
+        self.soundPlayed = False
+
+    def _handle_dog_animation(self, timer):
+        """Обробляє анімацію виходу собаки."""
+        self.frame += 3
+        ducks_shot = self._count_ducks_shot()
+        rect_source = self._get_dog_rect_and_play_sound(ducks_shot)
+        self._update_dog_position(rect_source, timer)
+
+    def _check_round_end_conditions(self, timer):
+        """Перевіряє умови завершення раунду."""
+        times_up = (timer - self.timer) > self.roundTime
+        all_ducks_finished = self.ducks[0].isFinished and self.ducks[1].isFinished
+        return times_up or all_ducks_finished
+
+    def _handle_flyaway_ducks(self):
+        """Запускає втечу качок, які залишились живими."""
+        for duck in self.ducks:
+            if not duck.isFinished and not duck.isDead:
+                duck.flyOff = True
+                return True
+        return False
+
+    def _update_hit_ducks_count(self):
+        """Оновлює лічильник збитих качок."""
+        for duck in self.ducks:
+            if not duck.isDead:
+                self.hitDuckIndex += 1
+
     def update(self, dt):
+        """
+        Оновлює позиції качок, перевіряє закінчення часу раунду
+        та керує анімацією собаки, яка підбирає збитих качок або сміється.
+        """
         timer = int(time.time())
 
         if self.dogCanComeOut:
-            self.frame += 3
-            ducksShot = 0
-            for duck in self.ducks:
-                if duck.isDead:
-                    ducksShot += 1
-
-            rectSource = None
-            if ducksShot == 1:
-                rectSource = DOG_ONE_DUCK_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('hit')
-            elif ducksShot == 2:
-                rectSource = DOG_TWO_DUCKS_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('hit')
-            else:
-                rectSource = DOG_LAUGH_RECT
-                if self.frame == 3:
-                    self.registry.get('soundHandler').enqueue('flyaway')
-
-            x1, y1 = self.dogPosition
-            x_src, y_src, w_src, h_max = rectSource
-
-            current_visible_height = h_max
-
-            if self.frame < h_max:
-                self.dogPosition = x1, (y1 - 3)
-                current_visible_height = self.frame
-            else:
-                self.dogPosition = x1, (y1 + 3)
-                current_visible_height -= (self.frame - h_max)
-
-            if current_visible_height <= 0:
-                self.dogPosition = DOG_REPORT_POSITION
-                self.frame = 0
-                self.dogCanComeOut = False
-                self.ducks = [Duck(self.registry), Duck(self.registry)]
-                self.timer = timer
-                self.gun.reloadIt()
-                self.dogRectToDraw = None
-            else:
-                self.dogRectToDraw = (x_src, y_src, w_src, current_visible_height)
-
+            self._handle_dog_animation(timer)
             return
 
         for duck in self.ducks:
             duck.update(dt)
 
-        timesUp = (timer - self.timer) > self.roundTime
-        if not (timesUp or (self.ducks[0].isFinished and self.ducks[1].isFinished)):
+        if not self._check_round_end_conditions(timer):
             return None
 
-        for duck in self.ducks:
-            if not duck.isFinished and not duck.isDead:
-                duck.flyOff = True
-                return None
+        if self._handle_flyaway_ducks():
+            return None
 
-        for duck in self.ducks:
-            if not duck.isDead and not duck.isFinished:
-                pass
-
-        for duck in self.ducks:
-            if not duck.isDead:
-                self.hitDuckIndex += 1
+        self._update_hit_ducks_count()
 
         if self.hitDuckIndex >= 9:
             return RoundEndState(self.hitDucks)
 
+        if not self.dogCanComeOut:
+            self.soundPlayed = False
         self.dogCanComeOut = True
 
     def render(self):
+        """Відмальовує качок, собаку, інтерфейс та приціл."""
+
         surface = self.registry.get('surface')
         sprites = self.registry.get('sprites')
 
@@ -344,11 +426,19 @@ class PlayState(BaseState):
             duck.render()
 
         if self.dogCanComeOut and self.dogRectToDraw:
-            surface.blit(sprites, self.dogPosition, self.dogRectToDraw)
+            x, y, w, h = self.dogRectToDraw
+            if h > 0 and w > 0:
+                surface.blit(sprites, self.dogPosition, self.dogRectToDraw)
 
         self.gun.render()
 
+
 class RoundEndState(BaseState):
+    """
+    Стан підведення підсумків раунду.
+    Перевіряє кількість влучних пострілів і вирішує: перехід на наступний раунд чи Game Over.
+    """
+
     def __init__(self, hitDucks):
         super(RoundEndState, self).__init__()
         self.isGameOver = False
@@ -356,7 +446,7 @@ class RoundEndState(BaseState):
 
         missedCount = 0
         for i in self.hitDucks:
-            if i == False:
+            if i is False:
                 missedCount += 1
         if missedCount >= 4:
             self.isGameOver = True
@@ -366,9 +456,11 @@ class RoundEndState(BaseState):
             self.registry.get('soundHandler').enqueue('nextround')
 
     def execute(self, event):
-        pass
+        """Обробляє події (не використовується на екрані підсумків)."""
 
     def update(self, dt):
+        """Очікує завершення звуків і перемикає на наступний раунд або екран програшу."""
+
         if pygame.mixer.get_busy():
             return None
 
@@ -379,25 +471,36 @@ class RoundEndState(BaseState):
             return RoundStartState()
 
     def render(self):
+        """Відмальовує фінальні повідомлення та інтерфейс раунду."""
+
         self.renderNotices()
         self.renderControls()
 
+
 class GameOverState(BaseState):
+    """Стан завершення гри. Очікує дій гравця для перезапуску."""
+
     def __init__(self):
         super(GameOverState, self).__init__()
         self.state = None
 
     def execute(self, event):
+        """Обробляє клік миші для скидання рахунку та перезапуску гри з першого раунду."""
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.registry.set('score', 0)
             self.registry.set('round', 1)
             self.state = RoundStartState()
 
     def update(self, dt):
+        """Повертає новий стан, якщо гравець вирішив почати заново."""
+
         self.notices = ("GAMEOVER", "")
         if self.state:
             return self.state
 
     def render(self):
+        """Відмальовує напис 'GAMEOVER' та інтерфейс."""
+
         self.renderNotices()
         self.renderControls()

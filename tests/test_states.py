@@ -1,8 +1,14 @@
+"""
+Тести для машини станів (State Machine) гри.
+Перевіряє логіку переходу між станами (зокрема, умови перемоги та поразки).
+"""
+
 import pytest
 from unittest.mock import MagicMock
 from duckhunt.core import states
 from duckhunt.core.states import RoundEndState
 from duckhunt.utils.registry import Registry
+
 
 @pytest.fixture
 def mock_env():
@@ -13,6 +19,7 @@ def mock_env():
     states.registry = reg
     return reg, mock_sound
 
+
 def test_round_end_game_over(mock_env):
     """Перевіряє логіку програшу (>= 4 промахи)."""
     _, mock_sound = mock_env
@@ -22,6 +29,7 @@ def test_round_end_game_over(mock_env):
 
     assert state.isGameOver is True
     mock_sound.enqueue.assert_called_once_with('gameover')
+
 
 def test_round_end_next_round(mock_env):
     """Перевіряє логіку переходу до наступного раунду (< 4 промахів)."""
