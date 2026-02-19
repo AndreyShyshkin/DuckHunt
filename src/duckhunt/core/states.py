@@ -336,14 +336,15 @@ class PlayState(BaseState):
 
         if self.frame < h_max:
             self.dogPosition = x1, (y1 - 3)
-            current_visible_height = self.frame
+            current_visible_height = min(self.frame, h_max)
         else:
             self.dogPosition = x1, (y1 + 3)
-            current_visible_height -= (self.frame - h_max)
+            current_visible_height = h_max - (self.frame - h_max)
 
         if current_visible_height <= 0:
             self._reset_round(timer)
         else:
+            current_visible_height = max(1, min(current_visible_height, h_max))
             self.dogRectToDraw = (x_src, y_src, w_src, current_visible_height)
 
     def _reset_round(self, timer):
@@ -425,7 +426,9 @@ class PlayState(BaseState):
             duck.render()
 
         if self.dogCanComeOut and self.dogRectToDraw:
-            surface.blit(sprites, self.dogPosition, self.dogRectToDraw)
+            x, y, w, h = self.dogRectToDraw
+            if h > 0 and w > 0:
+                surface.blit(sprites, self.dogPosition, self.dogRectToDraw)
 
         self.gun.render()
 
