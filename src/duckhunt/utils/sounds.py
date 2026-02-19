@@ -9,7 +9,7 @@ from duckhunt.core import settings
 
 def getSound(name, volume):
     """
-    Завантажує звуковий файл з папки ресурсів, встановлює його гучність 
+    Завантажує звуковий файл з папки ресурсів, встановлює його гучність
     та повертає об'єкт pygame.mixer.Sound.
     """
 
@@ -56,7 +56,7 @@ class SoundHandler:
 
     def toggleSound(self):
         """Перемикає стан звуку (увімкнено/вимкнено). Якщо звук вимкнено, зупиняє всі поточні звуки."""
-        
+
         self.mute = not self.mute
         if self.mute:
             pygame.mixer.stop()

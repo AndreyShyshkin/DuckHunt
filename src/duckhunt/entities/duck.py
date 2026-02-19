@@ -167,7 +167,7 @@ class Duck(object):
 
     def changeDirection(self):
         """Змінює напрямок руху качки та її швидкість при зіткненні з краями екрану."""
-        
+
         surface = self.registry.get('surface')
         round = self.registry.get('round')
         frameWidth, frameHeight = FRAME_SIZE

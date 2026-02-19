@@ -4,7 +4,7 @@
 """
 
 import pytest
-from duckhunt.utils.registry import Registry  
+from duckhunt.utils.registry import Registry
 
 # Підготовка
 @pytest.fixture
@@ -34,12 +34,12 @@ def test_score_accumulation(game_registry, initial_score, hits, expected_score):
     """
     # Встановлюємо початковий рахунок для тесту
     game_registry.set('score', initial_score)
-    
+
     # Імітуємо логіку нарахування балів з PlayState (по 10 балів за качку)
     for _ in range(hits):
         current_score = game_registry.get('score')
         game_registry.set('score', current_score + 10)
-        
+
     # Перевіряємо, чи збігається результат з очікуваним
     assert game_registry.get('score') == expected_score
 
@@ -51,11 +51,11 @@ def test_score_reset(game_registry):
     # Штучно створюємо ситуацію "кінця гри" з досягнутим прогресом
     game_registry.set('score', 540)
     game_registry.set('round', 7)
-    
+
     # Імітуємо логіку скидання з GameOverState.execute()
     game_registry.set('score', 0)
     game_registry.set('round', 1)
-    
+
     # Перевіряємо, чи відбулося скидання коректно
     assert game_registry.get('score') == 0
     assert game_registry.get('round') == 1

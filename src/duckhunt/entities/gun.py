@@ -10,7 +10,7 @@ from duckhunt.utils.registry import adjpos
 
 class Gun(object):
     """
-    Клас, що представляє рушницю гравця. 
+    Клас, що представляє рушницю гравця.
     Відповідає за відображення прицілу та логіку стрільби.
     """
 
@@ -25,7 +25,7 @@ class Gun(object):
 
     def render(self):
         """Відмальовує приціл на поточній позиції курсору миші."""
-        
+
         surface = self.registry.get('surface')
         surface.blit(self.mouseImg, self.mousePos)
 
@@ -47,10 +47,10 @@ class Gun(object):
 
     def shoot(self):
         """
-        Здійснює постріл, віднімає патрон та відтворює звук. 
+        Здійснює постріл, віднімає патрон та відтворює звук.
         Повертає True, якщо постріл успішний (були патрони).
         """
-        
+
         if self.rounds <= 0:
             return False
 

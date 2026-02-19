@@ -42,7 +42,7 @@ NOTICE_LINE_2_HEIGHT = None
 
 def init():
     """
-    Ініціалізує та масштабує глобальні координати і розміри об'єктів (собака, інтерфейс) 
+    Ініціалізує та масштабує глобальні координати і розміри об'єктів (собака, інтерфейс)
     під поточний розмір екрану.
     """
     global DOG_POSITION, DOG_FRAME, DOG_REPORT_POSITION, DOG_LAUGH_RECT, DOG_ONE_DUCK_RECT, DOG_TWO_DUCKS_RECT
@@ -128,7 +128,7 @@ class BaseState(object):
 
     def renderNotices(self):
         """Відмальовує текстові повідомлення на екрані (наприклад, номер раунду або Game Over)."""
-        
+
         if len(self.notices) == 0:
             return
         elif len(self.notices) == 1:
@@ -304,7 +304,7 @@ class PlayState(BaseState):
 
     def update(self, dt):
         """
-        Оновлює позиції качок, перевіряє закінчення часу раунду 
+        Оновлює позиції качок, перевіряє закінчення часу раунду
         та керує анімацією собаки, яка підбирає збитих качок або сміється.
         """
 
@@ -465,6 +465,6 @@ class GameOverState(BaseState):
 
     def render(self):
         """Відмальовує напис 'GAMEOVER' та інтерфейс."""
-        
+
         self.renderNotices()
         self.renderControls()

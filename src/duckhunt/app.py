@@ -1,6 +1,6 @@
 """
 Головний модуль застосунку.
-Містить клас Game, який відповідає за ініціалізацію вікна Pygame, масштабування екрану 
+Містить клас Game, який відповідає за ініціалізацію вікна Pygame, масштабування екрануflake8
 та виконання головного ігрового циклу (Game Loop).
 """
 
@@ -74,7 +74,6 @@ class Game(object):
 
     def handleEvent(self, event):
         """Обробляє системні події (закриття вікна, зміна розміру) та передає ігрові події до драйвера."""
-        
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             self.running = False
         else:
@@ -120,7 +119,7 @@ class Game(object):
 
     def execute(self):
         """Запускає головний ігровий цикл (обробка подій, оновлення логіки, рендеринг)."""
-        
+
         self.init()
 
         while (self.running):

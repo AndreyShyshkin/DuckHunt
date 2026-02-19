@@ -10,7 +10,7 @@ from duckhunt.utils.registry import Registry, adjwidth
 
 def test_registry_basics():
     """Перевіряє коректність запису (set) та читання (get) даних з реєстру."""
-    
+
     reg = Registry()
     reg.set('player_name', 'Oleg')
     assert reg.get('player_name') == 'Oleg'
@@ -19,7 +19,7 @@ def test_registry_basics():
 @pytest.mark.skip(reason="Демонстрація маркера skip.")
 def test_dummy_graphics():
     """Порожній тест для демонстрації ігнорування тестів (skip) у pytest."""
-    
+
     assert False
 
 @pytest.mark.parametrize(

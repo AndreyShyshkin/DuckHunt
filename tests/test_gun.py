@@ -13,7 +13,7 @@ pytestmark = pytest.mark.mechanics
 
 class TestGun:
     """Набір тестів для перевірки механіки рушниці гравця."""
-    
+
     def test_gun_shoot_decrements_ammo(self, mock_registry):
         """Перевірити, що постріл зменшує кількість патронів."""
         # Патчимо pygame всередині модуля gun
@@ -27,10 +27,10 @@ class TestGun:
 
             gun = Gun(mock_registry)
             initial_rounds = gun.rounds
-            
+
             # Стріляємо
             gun.shoot()
-            
+
             # Перевіряємо, що патронів стало менше
             assert gun.rounds == initial_rounds - 1
 
@@ -45,15 +45,15 @@ class TestGun:
 
             gun = Gun(mock_registry)
             gun.rounds = 0  # Забираємо патрони
-            
+
             result = gun.shoot()
-            
+
             assert result is False  # Постріл не відбувся
             assert gun.rounds == 0  # Патрони не пішли в мінус
 
     def test_gun_reload(self, mock_registry):
         """Перевірити, що перезарядка відновлює патрони."""
-        
+
         with patch('duckhunt.entities.gun.pygame') as mock_pygame:
             mock_img = MagicMock()
             mock_img.get_size.return_value = (50, 50)
@@ -62,7 +62,7 @@ class TestGun:
 
             gun = Gun(mock_registry)
             gun.rounds = 0
-            
+
             gun.reloadIt()
-            
+
             assert gun.rounds == settings.GUN_ROUNDS
