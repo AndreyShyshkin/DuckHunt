@@ -414,7 +414,7 @@ class RoundEndState(BaseState):
 
         missedCount = 0
         for i in self.hitDucks:
-            if i == False:
+            if i is False:
                 missedCount += 1
         if missedCount >= 4:
             self.isGameOver = True
