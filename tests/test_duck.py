@@ -1,3 +1,8 @@
+"""
+Модульні тести для ігрової сутності Duck (качка).
+Перевіряє математику руху та детекцію влучань (hitbox).
+"""
+
 import pytest
 from unittest.mock import MagicMock, patch
 import duckhunt.entities.duck as duck_module
@@ -6,6 +11,7 @@ import duckhunt.entities.duck as duck_module
 pytestmark = pytest.mark.mechanics
 
 class TestDuck:
+    """Набір тестів для перевірки логіки поведінки качки."""
 
     def test_duck_movement(self, mock_registry):
         """Перевірити, що качка змінює координати при оновленні."""

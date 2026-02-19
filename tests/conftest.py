@@ -1,3 +1,8 @@
+"""
+Глобальні фікстури для pytest.
+Містить загальні моки (імітації) для обходу залежності від графіки та аудіо Pygame під час тестування.
+"""
+
 import pytest
 from unittest.mock import MagicMock
 
