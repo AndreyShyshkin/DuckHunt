@@ -11,6 +11,7 @@ import pygame
 from duckhunt.core import settings
 from duckhunt.core import driver
 
+
 class Game(object):
     """
     Головний клас гри, що інкапсулює логіку вікна, поверхні відмальовки та таймери.

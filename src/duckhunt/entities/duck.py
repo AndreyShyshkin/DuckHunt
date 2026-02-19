@@ -12,6 +12,7 @@ XOFFSET, YOFFSET = None, None
 FLYOFF_YOFFSET = None
 FALL_YOFFSET = None
 
+
 def init():
     """Ініціалізує глобальні константи розмірів та зсувів для спрайтів качки відповідно до розміру екрану."""
 
@@ -20,6 +21,7 @@ def init():
     XOFFSET, YOFFSET = adjpos(settings.DUCK_X_OFFSET, settings.DUCK_Y_OFFSET)
     FLYOFF_YOFFSET = YOFFSET + adjheight(settings.DUCK_FLYOFF_Y_OFFSET)
     FALL_YOFFSET = YOFFSET + adjheight(settings.DUCK_FALL_Y_OFFSET)
+
 
 class Duck(object):
     """

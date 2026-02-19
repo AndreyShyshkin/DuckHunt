@@ -11,6 +11,7 @@ from duckhunt.core import settings
 # Маркуємо всі тести в цьому файлі як 'mechanics'
 pytestmark = pytest.mark.mechanics
 
+
 class TestGun:
     """Набір тестів для перевірки механіки рушниці гравця."""
 

@@ -9,6 +9,7 @@ from duckhunt.core import states
 from duckhunt.core.states import RoundEndState
 from duckhunt.utils.registry import Registry
 
+
 @pytest.fixture
 def mock_env():
     """Створює Registry та мокає (імітує) звуковий обробник."""
@@ -17,6 +18,7 @@ def mock_env():
     reg.set('soundHandler', mock_sound)
     states.registry = reg
     return reg, mock_sound
+
 
 def test_round_end_game_over(mock_env):
     """Перевіряє логіку програшу (>= 4 промахи)."""
@@ -27,6 +29,7 @@ def test_round_end_game_over(mock_env):
 
     assert state.isGameOver is True
     mock_sound.enqueue.assert_called_once_with('gameover')
+
 
 def test_round_end_next_round(mock_env):
     """Перевіряє логіку переходу до наступного раунду (< 4 промахів)."""

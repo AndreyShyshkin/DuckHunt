@@ -10,6 +10,7 @@ import duckhunt.entities.duck as duck_module
 # Маркуємо всі тести в цьому файлі як 'mechanics'
 pytestmark = pytest.mark.mechanics
 
+
 class TestDuck:
     """Набір тестів для перевірки логіки поведінки качки."""
 

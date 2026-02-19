@@ -7,6 +7,8 @@ import pytest
 from duckhunt.utils.registry import Registry
 
 # Підготовка
+
+
 @pytest.fixture
 def game_registry():
     """
@@ -19,6 +21,8 @@ def game_registry():
     return reg
 
 # Нарахування балів
+
+
 @pytest.mark.parametrize(
     "initial_score, hits, expected_score",
     [
@@ -44,6 +48,8 @@ def test_score_accumulation(game_registry, initial_score, hits, expected_score):
     assert game_registry.get('score') == expected_score
 
 # GAME OVER (Скидання гри)
+
+
 def test_score_reset(game_registry):
     """
     Перевіряє, що після стану Game Over рахунок скидається на 0, а раунд на 1.
