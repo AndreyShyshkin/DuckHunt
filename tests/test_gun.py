@@ -1,3 +1,8 @@
+"""
+Модульні тести для ігрової сутності Gun (зброя).
+Перевіряє логіку стрільби, витрати патронів та перезарядки.
+"""
+
 import pytest
 from unittest.mock import MagicMock, patch
 from duckhunt.entities.gun import Gun
@@ -7,6 +12,7 @@ from duckhunt.core import settings
 pytestmark = pytest.mark.mechanics
 
 class TestGun:
+    """Набір тестів для перевірки механіки рушниці гравця."""
     
     def test_gun_shoot_decrements_ammo(self, mock_registry):
         """Перевірити, що постріл зменшує кількість патронів."""
