@@ -218,7 +218,6 @@ class RoundStartState(BaseState):
     def execute(self, event):
         """Обробляє події (не використовується під час стартової анімації)."""
 
-        pass
 
     def update(self, dt):
         """Оновлює кадри анімації собаки та перемикає гру в стан PlayState після завершення анімації."""
@@ -429,7 +428,6 @@ class RoundEndState(BaseState):
     def execute(self, event):
         """Обробляє події (не використовується на екрані підсумків)."""
 
-        pass
 
     def update(self, dt):
         """Очікує завершення звуків і перемикає на наступний раунд або екран програшу."""

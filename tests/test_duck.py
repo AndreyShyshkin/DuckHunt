@@ -4,7 +4,6 @@
 """
 
 import pytest
-from unittest.mock import MagicMock, patch
 import duckhunt.entities.duck as duck_module
 
 # Маркуємо всі тести в цьому файлі як 'mechanics'
