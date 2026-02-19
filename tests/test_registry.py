@@ -1,3 +1,8 @@
+"""
+Тести для утиліт гри.
+Перевіряє роботу реєстру (Service Locator) та математику масштабування екрану.
+"""
+
 import pytest
 from duckhunt.utils.registry import Registry, adjwidth
 
