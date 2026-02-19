@@ -1,4 +1,12 @@
 [flake8]
-exclude = .git,__pycache__,env,venv, .venv
+# Додаємо build та dist
+exclude = .git,__pycache__,env,venv,.venv,build,dist
+
+
 max-line-length = 120
 max-complexity = 10
+
+# Додаємо ігнорування правил, які застаріли або конфліктують із форматерами 
+# E203: Whitespace before ':'
+# W503: Line break occurred before a binary operator
+ignore = E203, W503
